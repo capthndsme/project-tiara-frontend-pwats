@@ -2,15 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { Toaster } from 'react-hot-toast';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <div className="App">
+			<BrowserRouter>
+				<Routes>
+					<Route path="/*"  element={<App />} />
+				</Routes>
+			</BrowserRouter>
+			<Toaster />
+		</div>
   </React.StrictMode>
 );
 

@@ -1,0 +1,10 @@
+{
+   "en": {
+      "AUTH_FAIL": "Login failed",
+      "AUTH_SUCCESS": "Login successful",
+      "AUTHENTICATING": "Logging in...",
+      "DISCONNECTED": "Disconnected",
+      "CONNECTING": "Connecting...",
+      "CONNECTED": "Connected"
+   }
+}
