@@ -1,21 +1,30 @@
-#LoggedOutScreen::-webkit-scrollbar { 
-   display: none;  /* Safari and Chrome */
- }
- #LoggedOutScreen {
-   height: 100%;
-   top:0;left:0;
-   position: fixed;
-   width: 100%;
-  
- 
-   -ms-overflow-style: none;  /* Internet Explorer 10+ */
-   scrollbar-width: none;  /* Firefox */
-   min-height: 100%;
-   background: url("./Images/devices.jpg") no-repeat center center fixed;
-   -webkit-background-size: cover;
-   -moz-background-size: cover;
-   -o-background-size: cover;
-   animation: getIn 350ms ease-in-out;
-   overflow-y: scroll;
-   background-size: cover;
- }
+#LoggedOutScreen::-webkit-scrollbar {
+	display: none; /* Safari and Chrome */
+}
+#LoggedOutScreen {
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	width: 100%;
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+	scrollbar-width: none; /* Firefox */
+	min-height: 100%;
+	background: url("./Images/devices.jpg") no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	animation: getIn 350ms ease-in-out;
+	overflow-y: scroll;
+	background-size: cover;
+}
+@keyframes getIn {
+	0% {
+		opacity: 0;
+		transform: scale(2.5);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

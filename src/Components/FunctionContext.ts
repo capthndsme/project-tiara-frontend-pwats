@@ -1,13 +1,21 @@
 import { createContext } from 'react';
 import { AppStateType } from './AppContext';
+import { DeviceState } from '../Types/DeviceState';
+import { DeviceBaseToggle } from '../Types/DeviceBaseToggle';
 
-export type FunctionContext = {
+
+export type FunctionContextType = {
    setAppState: React.Dispatch<React.SetStateAction<AppStateType>>;
-   setConnected: React.Dispatch<React.SetStateAction<boolean>>;
+   setActiveDeviceState: React.Dispatch<React.SetStateAction<DeviceState>>;
+   
+   mutateToggle: (val: boolean, name: string) => void;
+   
 }
-export const DefaultFunctionContext: FunctionContext = {
+export const DefaultFunctionContext: FunctionContextType = {
    setAppState: () => { },
-   setConnected: () => { }
+   setActiveDeviceState: () => { },
+
+   mutateToggle: () => {}
 };
 
-export const FunctionContext = createContext<Partial<FunctionContext>>(DefaultFunctionContext);
+export const FunctionContext = createContext<Partial<FunctionContextType>>(DefaultFunctionContext);

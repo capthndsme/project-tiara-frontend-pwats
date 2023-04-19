@@ -1,31 +1,22 @@
-import { useContext } from "react";
-import { AppContext } from "../Components/AppContext";
-import { Spin } from "../Components/Spin";
 import { Route, Routes } from "react-router-dom";
 
+import { HomescreenView } from "./HomescreenView";
+import { Triggers } from "./Triggers";
+import { Alerts } from "./Alerts";
+import { More } from "./More";
+import NavigationBar from "../Components/NavigationBar";
 
 export function MainScreen() {
-	const appContext = useContext(AppContext);
-
-	if (appContext.connected) {
-		return (
-			<>
-			 
-
-				<Routes>
-					
-				</Routes>
-			</>
-		);
-	} else {
-		return (
-			<div className="fullscreen loading">
-				<div>
-					<Spin />
-					<br />
-					Connecting to Project Tiara services...
-				</div>
-			</div>
-		);
-	}
+	return (
+		<>
+			<NavigationBar />
+			<Routes>
+				<Route path="/" element={<HomescreenView />} />
+				<Route path="/triggers" element={<Triggers />} />
+				<Route path="/alerts" element={<Alerts />} />
+				<Route path="/stats" element={<div>stats</div>} />
+				<Route path="/more" element={<More />} />
+			</Routes>
+		</>
+	);
 }

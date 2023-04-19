@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import "../Styles/Login.css"
 import toast from "react-hot-toast";
 import { FunctionContext } from "../Components/FunctionContext";
-import { WSLogin } from "../Types/WSLogin";
+import { WSLogin } from "../Types/WS/Login";
 
 export function Login() {
    const [loading, setLoading] = useState(false);
@@ -52,15 +52,20 @@ export function Login() {
   
 	useEffect(() => {
       if (!socket.connected) { 
-         toast("Reconnecting")
+         //toast("Reconnecting")
          socket.connect();
          
-         if (functionContext.setConnected) functionContext.setConnected(true);
+       
       }
       if (appContext.authenticated) {
          console.log("Already logged in.")
          navigate("/");
       }
+      let socketKeepalive = setInterval(() => {
+         // Signifies that the user is still in this screen.
+         if (!socket.connected) socket.connect();
+         socket.emit("AuthenticationKeepalive");
+      }, 15000);
 		const user = localStorage.getItem("username");
 		const session = localStorage.getItem("session");
 		if (user && session) {
@@ -75,7 +80,7 @@ export function Login() {
             }, (data: any) => {
                if (data.success) {
                   // Redirect to the main screen
-                  if (functionContext.setConnected) functionContext.setConnected(true);
+                  
                   navigate("/");
                   
                } else {
@@ -87,6 +92,9 @@ export function Login() {
             navigate("/");
          }
 		}
+      return () => {
+         clearInterval(socketKeepalive);
+      }
 	}, [navigate, appContext.authenticated]);
 	return (
       <div id="LoggedOutScreen">
