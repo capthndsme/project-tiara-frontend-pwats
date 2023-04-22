@@ -1,3 +1,4 @@
+import Delayed from "./Delayed";
 import { Spin } from "./Spin";
 
 export function DisconnectedOverlay({ disconnected }: { disconnected: boolean }) {
@@ -23,18 +24,20 @@ export function DisconnectedOverlay({ disconnected }: { disconnected: boolean })
 				<Spin />
 				<br />
 				Connecting to Project Tiara services...
-				<div className="refreshBox">
-					Taking a while? <br />
-					You can try to reload the page.
-					<br />
-					Or our servers might be down.
-					<button className="refreshButton" onClick={() => window.location.reload()}>
-						Reload page
-					</button>
-					<span className="toggleSmall white">
-						Service status (soon)
-					</span>
-				</div>
+				<Delayed delay={10000}>
+					<div className="refreshBox">
+						Taking a while? <br />
+						You can try to reload the page.
+						<br />
+						Or our servers might be down.
+						<button className="refreshButton" onClick={() => window.location.reload()}>
+							Reload page
+						</button>
+						<span className="toggleSmall white">
+							Service status (soon)
+						</span>
+					</div>
+				</Delayed>
 			</div>
 		</div>
 	);
