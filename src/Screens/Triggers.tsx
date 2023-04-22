@@ -1,28 +1,32 @@
 import { useEffect, useState } from "react";
-import { TopBar } from "../Components/TopBar";
 import { socket } from "../Components/socket";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { DeviceReqStatus } from "../Types/DeviceReqStatus";
 import { ScheduledTask } from "../Types/SchedulerTypes";
+import { TriggerScreen } from "./Subscreens/TriggerScreen";
+import { AddTriggers } from "./Subscreens/AddTriggers";
 
 export function Triggers() {
 	// Load triggers
 	const [triggers, setTriggers] = useState<Array<ScheduledTask>>([]);
-	const navigate = useNavigate();
+	
 	useEffect(() => {
 		if (socket.disconnected) {
 			// If the socket is disconnected, redirect to the main app page
-			toast("Cannot load triggers due to disconnected socket.")
-			navigate("/");
+			socket.connect();
+			//navigate("/");
+			//return;
 		}
 		// Get Scheduler Data For Subscribed Device (SchedGetSD)
 		// The server will send back a list of triggers for the client's currently subscribed device.
 		socket.timeout(15000).emit("SchedGetSD", {}, (err: Boolean, data: DeviceReqStatus<Array<ScheduledTask>>) => {
 			if (err) {
+ 
 				toast.error("Failed to get triggers for your device.");
 				return; 
 			} else {
+				
 				if (data.success && data.data) {
 					setTriggers(data.data);
 				} else {
@@ -36,11 +40,17 @@ export function Triggers() {
 			// It seems that we don't need to do anything here.
 			// for now? 
 		}
-	}, [navigate]);
-	console.log("Triggers", triggers)
-	return (
-		<div className="screen">
-			<TopBar> Triggers </TopBar>
-		</div>
-	);
+	}, []);
+ 
+	return(
+	<div className="screen">
+		<Routes>
+			<Route path="/" element={<TriggerScreen triggers={triggers} />} />
+			<Route path="/add" element={<AddTriggers/>} />
+		</Routes>
+		
+	</div>
+		
+	)
+	
 }

@@ -2,11 +2,12 @@ import "./App.css";
 import toast from "react-hot-toast";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Screens/Login";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from "./Components/socket";
 import { AppContext, AppStateType, DefaultAppState } from "./Components/AppContext";
 import { DisconnectedOverlay } from "./Components/DisconnectedOverlay";
 import { FunctionContext, FunctionContextType } from "./Components/FunctionContext";
+import "@fontsource/inter/500.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/300.css";
 import "@fontsource/inter/200.css";
@@ -17,10 +18,12 @@ import { DeviceStateUpdate } from "./Types/DeviceStateUpdate";
 import { DefaultDeviceState, DeviceState } from "./Types/DeviceState";
 import { ToggleStateMutateAcknowledge } from "./Types/ToggleStateMutateAcknowledge";
 import { DeviceBaseToggle } from "./Types/DeviceBaseToggle";
-function App(): JSX.Element {
-	const navigate = useNavigate();
-	const [appState, setAppState] = useState<AppStateType>(DefaultAppState);
 
+function App(): JSX.Element {
+	const navigate = useRef(useNavigate());
+	const [appState, setAppState] = useState<AppStateType>(DefaultAppState);
+	// ConnectedOnce is used to determine if we should show the disconnected overlay.
+	const [connectedOnce, setConnectedOnce] = useState<boolean>(false);
 	// const [activeHwid, setActiveHwid] = useState("");
 	const [activeDeviceState, setActiveDeviceState] = useState<DeviceState>(DefaultDeviceState);
 
@@ -44,7 +47,8 @@ function App(): JSX.Element {
 					const found = newDeviceToggles[i];
 					if (found) {
 						// Create a new copy of the found object with the updated property
-						const newFound = { ...found, hasLock: true };
+						// Mutate last changed to the current time (Doesn't matter if we use the server time or not)
+						const newFound = { ...found, hasLock: true, lastChanged: new Date().getTime() };
 						// Replace the old object with the new one in the new array
 						newDeviceToggles[i] = newFound;
 					}
@@ -117,7 +121,7 @@ function App(): JSX.Element {
 		const user = localStorage.getItem("username");
 		const session = localStorage.getItem("session");
 		if (!user || !session) {
-			navigate("/login");
+			navigate.current("/login");
 		}
 
 		// Connect to the websocket
@@ -143,7 +147,9 @@ function App(): JSX.Element {
 								toast.error("Failed to get device list.");
 								return;
 							}
-
+							// Move ConnectedOnce here. ConnectedOnce significies that we have connected to the server at least once.
+							// and have received a list of devices.
+							setConnectedOnce(true);
 							if (requestData.devices) {
 								if (requestData.devices.length === 0) {
 									// Show a message saying that there are no devices
@@ -185,7 +191,7 @@ function App(): JSX.Element {
 						localStorage.removeItem("session");
 
 						setAppState((appState) => ({ ...appState, authenticated: false, connected: true }));
-						navigate("/login");
+						navigate.current("/login");
 					}
 				}
 			);
@@ -225,12 +231,13 @@ function App(): JSX.Element {
 		});
 
 		return () => {
-			//socket.disconnect(); // For some reason, this causes the socket to disconnect when navigating other pages.
+			socket.disconnect(); 
 			socket.off("connect");
 			socket.off("toggleStateUpdate");
 			socket.off("disconnect");
 		};
-	}, [navigate]);
+		// The navigate function is a dependency of this effect, but we don't want to run this effect when it changes.
+	}, []);
 	return (
 		<AppContext.Provider value={appState}>
 			<FunctionContext.Provider value={appFunctions}>
@@ -239,7 +246,7 @@ function App(): JSX.Element {
 
 					<Routes>
 						<Route path="/login" element={<Login />} />
-						<Route path="/*" element={<MainScreen />} />
+						<Route path="/*" element={<MainScreen connectedOnce={connectedOnce}/>} />
 					</Routes>
 				</ActiveDeviceContext.Provider>
 			</FunctionContext.Provider>

@@ -17,3 +17,18 @@ export interface TempTriggerArray {
 	triggerOffTemp: number;
 	triggerOnTemp: number;
 }
+
+export const ScheduledTaskBase = {
+	every: [],
+	tempRange: null,
+	timeRange: {
+		from: {
+			time: null,
+			lastExecuted: 0,
+		},
+		to: {
+			time: null,
+			lastExecuted: 0,
+		},
+	},
+}

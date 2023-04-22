@@ -15,6 +15,13 @@ export default function NavigationBar() {
 			return "navLinks";
 		}
 	}
+	function checkActiveStart(path: string) {
+		if (activeLocation.startsWith(path)) {
+			return "activeLink navLinks";
+		} else {
+			return "navLinks";
+		}
+	}
 	return (
 		<div id="NavigationBar">
 			<div id="InnerNavBar">
@@ -23,7 +30,7 @@ export default function NavigationBar() {
 					<div className="label">Home</div>
 				</Link>
 
-				<Link className={checkActive("/triggers")} to="/triggers">
+				<Link className={checkActiveStart("/triggers")} to="/triggers">
 					<HiOutlineClock size="32" />
 					<div className="label">Triggers</div>
 				</Link>

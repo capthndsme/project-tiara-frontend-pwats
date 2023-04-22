@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { socket } from "../Components/socket";
 import { useNavigate } from "react-router-dom";
-import { AppContext, AppStateType } from "../Components/AppContext";
+import { AppContext } from "../Components/AppContext";
 import { Link } from "react-router-dom";
 import "../Styles/Login.css"
 import toast from "react-hot-toast";
@@ -43,7 +43,8 @@ export function Login() {
             localStorage.setItem("username", username);
             localStorage.setItem("session", data.session);
             if (functionContext.setAppState) functionContext.setAppState(appState=>({...appState, authenticated: true, accountId: data.accountId, connected: true}));
-            navigate("/");
+            window.location.reload(); // Reload the page since the user is now logged in.
+            // This is a user interface issue. The user should be redirected to the main screen.
          } else {
             toast.error("Failed to log in. Check your username and password.");
          }
