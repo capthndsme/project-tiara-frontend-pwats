@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { ActiveDeviceContext } from "../../Components/ActiveDeviceContext";
 import { TopBar } from "../../Components/TopBar";
-import { DeviceBaseToggle } from "../../Types/DeviceBaseToggle";
 import { SimpleBackButton } from "../../Components/SimpleBackButton";
 import { ScheduledTask, ScheduledTaskBase, SchedulerTime } from "../../Types/SchedulerTypes";
 
@@ -27,28 +26,40 @@ export function AddTriggers() {
 			);
 		}
 	}
-   function addTime() {
-      const newTime: SchedulerTime = {
-         time: null,
-         lastExecuted: 0,
-      };
-      setLocalScheduler(sched=>({...sched, every: [...sched.every, newTime]}));
-   }
+	function addTime() {
+		const newTime: SchedulerTime = {
+			time: null,
+			lastExecuted: 0,
+		};
+		setLocalScheduler((sched) => ({ ...sched, every: [...sched.every, newTime] }));
+	}
 	let RenderOptions = <></>;
 	if (activeKey !== -1) {
-      let everyTriggers = [];
-      if (localScheduler.every) {
-         for (let i = 0; i < localScheduler.every.length; i++) {
-            everyTriggers.push(
-               <div key={i} className="trigger">
-                  <input type="time" />
-                  <button className="refreshButton">Remove</button>
-               </div>
-            );
-         }
-      }
+		let everyTriggers = [];
+		if (localScheduler.every) {
+			for (let i = 0; i < localScheduler.every.length; i++) {
+				const time = localScheduler.every[i].time;
+				let timeVal = "";
+				if (time) {
+					timeVal = String(time[0]).padStart(2, "0") + ":" + String(time[1]).padStart(2, "0")
+				}
+				everyTriggers.push(
+					<div key={i} className="trigger">
+						<input type="time" value={timeVal} onChange={(val) => {
+							const newTime: SchedulerTime = {
+								time: [parseInt(val.target.value.split(":")[0]), parseInt(val.target.value.split(":")[1])],
+								lastExecuted: 0,
+							};
+							setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), newTime, ...sched.every.slice(i + 1)] }));
+						}} />
+						<button className="refreshButton" onClick={()=>{
+							setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), ...sched.every.slice(i + 1)] }));
+						}}>Remove</button>
+					</div>
+				);
+			}
+		}
 
-      
 		RenderOptions = (
 			<>
 				<div className="padding">
@@ -59,10 +70,15 @@ export function AddTriggers() {
 							triggered, it will be skipped.
 						</p>
 						<section className="triggerEditor">
-                     <div className="triggerContainer">
-                     {everyTriggers}
-                     </div>
-							<button onClick={addTime} className="refreshButton">Add a time trigger</button>
+							{localScheduler.every?.length === 0 ? (
+								<center>No time triggers set.</center>
+							) : (
+								<>{everyTriggers}</>
+							)}
+
+							<button onClick={addTime} disabled={(localScheduler.every?.length>3)} className="refreshButton">
+								Add a time trigger ({localScheduler.every?.length}/4)
+							</button>
 						</section>
 					</section>
 					<section>
@@ -73,10 +89,7 @@ export function AddTriggers() {
 							would be toggled off at that time.
 						</p>
 						<p>Not all toggle types support time-range triggers.</p>
-						<section className="triggerEditor">
-
-
-                  </section>
+						<section className="triggerEditor"></section>
 					</section>
 					<section>
 						<h2 className="noMargin">Temperature-range triggers</h2>
