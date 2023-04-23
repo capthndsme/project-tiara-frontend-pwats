@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Project Tiara",
+  "name": "Project Tiara is a web application that allows you to manage your smart doghouse.",
   "icons": [
     {
       "src": "favicon.ico",
