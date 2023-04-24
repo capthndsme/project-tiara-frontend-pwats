@@ -74,8 +74,9 @@ function App(): JSX.Element {
 				} else {
 					if (!data.toggleSuccess && data.toggleError) {
 						toast.error("Error toggling: " + data.toggleError);
+					} else {
+						toast("Toggled " + name, { icon: val ? "🟢" : "🔴" });
 					}
-					toast("Toggled " + name, {icon: val?"🟢":"🔴"});
 				}
 				setActiveDeviceState((state) => {
 					// Create a new copy of the state
@@ -90,7 +91,7 @@ function App(): JSX.Element {
 								// Create a new copy of the found object with the updated property
 								const newFound = {
 									...found,
-									hasLock: false, 
+									hasLock: false,
 
 									// If there was an error, keep the old value.
 									toggleValue: hasError ? found.toggleValue : data.toggleValue ? true : false,
@@ -231,7 +232,7 @@ function App(): JSX.Element {
 		});
 
 		return () => {
-			socket.disconnect(); 
+			socket.disconnect();
 			socket.off("connect");
 			socket.off("toggleStateUpdate");
 			socket.off("disconnect");
@@ -246,7 +247,7 @@ function App(): JSX.Element {
 
 					<Routes>
 						<Route path="/login" element={<Login />} />
-						<Route path="/*" element={<MainScreen connectedOnce={connectedOnce}/>} />
+						<Route path="/*" element={<MainScreen connectedOnce={connectedOnce} />} />
 					</Routes>
 				</ActiveDeviceContext.Provider>
 			</FunctionContext.Provider>
