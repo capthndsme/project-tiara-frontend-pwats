@@ -3,6 +3,7 @@ import { ActiveDeviceContext } from "../../Components/ActiveDeviceContext";
 import { TopBar } from "../../Components/TopBar";
 import { SimpleBackButton } from "../../Components/SimpleBackButton";
 import { ScheduledTask, ScheduledTaskBase, SchedulerTime } from "../../Types/SchedulerTypes";
+import { ToggleType } from "../../Types/DeviceBaseToggle";
 
 export function AddTriggers() {
 	const adc = useContext(ActiveDeviceContext);
@@ -34,6 +35,17 @@ export function AddTriggers() {
 		setLocalScheduler((sched) => ({ ...sched, every: [...sched.every, newTime] }));
 	}
 	let RenderOptions = <></>;
+
+	function requireToggleType(type: ToggleType): string {
+		if (adc.deviceToggles) {
+			const toggle = adc.deviceToggles[activeKey];
+			if (toggle) {
+				return toggle.toggleType === type ? "dt" : "dt disabled";
+			}
+		}
+		// If we get here, we have no toggles, so we can't have a toggle type
+		return "dt disabled";
+	}
 	if (activeKey !== -1) {
 		let everyTriggers = [];
 		if (localScheduler.every) {
@@ -41,20 +53,32 @@ export function AddTriggers() {
 				const time = localScheduler.every[i].time;
 				let timeVal = "";
 				if (time) {
-					timeVal = String(time[0]).padStart(2, "0") + ":" + String(time[1]).padStart(2, "0")
+					timeVal = String(time[0]).padStart(2, "0") + ":" + String(time[1]).padStart(2, "0");
 				}
 				everyTriggers.push(
 					<div key={i} className="trigger">
-						<input type="time" value={timeVal} onChange={(val) => {
-							const newTime: SchedulerTime = {
-								time: [parseInt(val.target.value.split(":")[0]), parseInt(val.target.value.split(":")[1])],
-								lastExecuted: 0,
-							};
-							setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), newTime, ...sched.every.slice(i + 1)] }));
-						}} />
-						<button className="refreshButton" onClick={()=>{
-							setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), ...sched.every.slice(i + 1)] }));
-						}}>Remove</button>
+						<input
+							type="time"
+							value={timeVal}
+							onChange={(val) => {
+								const newTime: SchedulerTime = {
+									time: [parseInt(val.target.value.split(":")[0]), parseInt(val.target.value.split(":")[1])],
+									lastExecuted: 0,
+								};
+								setLocalScheduler((sched) => ({
+									...sched,
+									every: [...sched.every.slice(0, i), newTime, ...sched.every.slice(i + 1)],
+								}));
+							}}
+						/>
+						<button
+							className="refreshButton"
+							onClick={() => {
+								setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), ...sched.every.slice(i + 1)] }));
+							}}
+						>
+							Remove
+						</button>
 					</div>
 				);
 			}
@@ -63,42 +87,33 @@ export function AddTriggers() {
 		RenderOptions = (
 			<>
 				<div className="padding">
-					<section>
+					<section className={requireToggleType(ToggleType.ONEOFF)}> 
 						<h2 className="noMargin">Time triggers</h2>
-						<p>
-							Time triggers are triggered at a specific time of day. When your device is turned off before an automation is
-							triggered, it will be skipped.
-						</p>
-						<section className="triggerEditor">
-							{localScheduler.every?.length === 0 ? (
-								<center>No time triggers set.</center>
-							) : (
-								<>{everyTriggers}</>
-							)}
 
-							<button onClick={addTime} disabled={(localScheduler.every?.length>3)} className="refreshButton">
+						<section className="triggerEditor">
+						Time triggers are triggered at a specific time of day. When your device is turned off before an automation is
+							triggered, it will be skipped.
+							{localScheduler.every?.length === 0 ? <center>No time triggers set.</center> : <>{everyTriggers}</>}
+
+							<button onClick={addTime} disabled={localScheduler.every?.length > 3} className="refreshButton">
 								Add a time trigger ({localScheduler.every?.length}/4)
 							</button>
 						</section>
 					</section>
-					<section>
-						<h2 className="noMargin">Time-range triggers</h2>
-						<p>
-							Time-range triggers are triggered at a specific time of day, the start and end time of the trigger can be set. The
-							start of the trigger-time means that it would be toggled on at that time, and the end of the trigger-time means that it
-							would be toggled off at that time.
-						</p>
-						<p>Not all toggle types support time-range triggers.</p>
-						<section className="triggerEditor"></section>
+				
+					<section className={requireToggleType(ToggleType.SWITCH)}>
+					<h2 className="noMargin">Time-range triggers</h2>
+						<section className="triggerEditor">
+							This output will be turned on between <input type="time" /> and <input type="time" /> <br />
+						</section>
 					</section>
-					<section>
-						<h2 className="noMargin">Temperature-range triggers</h2>
-						<p>
-							Temperature-range triggers are triggered when the temperature inside the doghouse are within a specific range. The
-							lower and upper bounds of the trigger can be set. When the temperature is below the lower bound, the trigger will be
-							toggled on, and when the temperature is above the upper bound, the trigger will be toggled off.
-						</p>
-						<section className="triggerEditor"></section>
+				
+					<section className={requireToggleType(ToggleType.SWITCH)}>
+					<h2 className="noMargin">Temperature-range triggers</h2>
+						<section className="triggerEditor">
+							Turn on when temperature is between <input type="number" /> and <input type="number" />°C <br />
+							(The selected output will be turned off when the temperature is below this range, and will remain on when it is above this range)
+						</section>
 					</section>
 				</div>
 			</>

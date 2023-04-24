@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 import { AppStateType } from './AppContext';
 import { DeviceState } from '../Types/DeviceState';
-import { DeviceBaseToggle } from '../Types/DeviceBaseToggle';
 
 
 export type FunctionContextType = {
