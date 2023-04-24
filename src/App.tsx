@@ -119,8 +119,14 @@ function App(): JSX.Element {
 	};
 	function reloadTheme() {
 		const theme = localStorage.getItem("theme");
+		const themebg = localStorage.getItem("theme-custombg");
 		if (theme) {
 			document.documentElement.setAttribute("data-theme", theme);
+			document.documentElement.style.backgroundSize = "unset";
+		}
+		if (themebg) {
+			document.documentElement.style.setProperty("--bg-colour", `url("${themebg}") no-repeat center center fixed`);
+			document.documentElement.style.backgroundSize = "cover";
 		}
 	}
 	useEffect(() => {
@@ -136,10 +142,15 @@ function App(): JSX.Element {
 		// Theme loader
 
 		const theme = localStorage.getItem("theme");
+		const themebg = localStorage.getItem("theme-custombg");
 		if (theme) {
 			document.documentElement.setAttribute("data-theme", theme);
+			document.documentElement.style.backgroundSize = "unset";
 		}
-
+		if (themebg) {
+			document.documentElement.style.setProperty("--bg-colour", `url("${themebg}") no-repeat center center fixed`);
+			document.documentElement.style.backgroundSize = "cover";
+		}
 		// Connect to the websocket
 		socket.connect();
 		// Authenticate the user

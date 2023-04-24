@@ -14,7 +14,7 @@ html[data-theme="teal"] {
 html[data-theme="midnightblue"] {
    --darker-bg-colour: #0A0913;
 	--darker-bg-colour-translucent: hsla(246, 36%, 5%, 0.8);
-	--bg-colour: #131122;
+	--bg-colour: linear-gradient(180deg, #131122 0%, #1c192c 100%);
 	--bg2-colour: #1D1936;
 	--bg2-colour-translucent: #1d1936d7;
 	--blur-filter: 20px;
