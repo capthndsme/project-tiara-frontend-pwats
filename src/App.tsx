@@ -1,4 +1,5 @@
 import "./App.css";
+import "./Styles/MidnightBlue.css";
 import toast from "react-hot-toast";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Screens/Login";
