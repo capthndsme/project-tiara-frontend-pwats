@@ -7,14 +7,14 @@ import { DeviceBaseToggle } from '../Types/DeviceBaseToggle';
 export type FunctionContextType = {
    setAppState: React.Dispatch<React.SetStateAction<AppStateType>>;
    setActiveDeviceState: React.Dispatch<React.SetStateAction<DeviceState>>;
-   
+   reloadTheme: () => void;
    mutateToggle: (val: boolean, name: string) => void;
    
 }
 export const DefaultFunctionContext: FunctionContextType = {
    setAppState: () => { },
    setActiveDeviceState: () => { },
-
+   reloadTheme: () => { },
    mutateToggle: () => {}
 };
 

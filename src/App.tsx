@@ -1,5 +1,5 @@
 import "./App.css";
-import "./Styles/MidnightBlue.css";
+import "./Styles/AppThemes.css";
 import toast from "react-hot-toast";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Screens/Login";
@@ -32,6 +32,7 @@ function App(): JSX.Element {
 		console.log("Received toggle mutate request.");
 		console.log("Toggle name: ", name);
 		console.log("Toggle value: ", val);
+
 		// Lock our local toggle so it doesn't get changed
 		// while we're waiting for the server to respond.
 		// This is done by setting the hasLock property to true.
@@ -113,9 +114,15 @@ function App(): JSX.Element {
 	const appFunctions: FunctionContextType = {
 		setAppState,
 		setActiveDeviceState,
-
+		reloadTheme, 
 		mutateToggle,
 	};
+	function reloadTheme() {
+		const theme = localStorage.getItem("theme");
+		if (theme) {
+			document.documentElement.setAttribute("data-theme", theme);
+		}
+	}
 	useEffect(() => {
 		// Check if the user is logged in
 		// If not, redirect to login page.
@@ -124,6 +131,13 @@ function App(): JSX.Element {
 		const session = localStorage.getItem("session");
 		if (!user || !session) {
 			navigate.current("/login");
+		}
+
+		// Theme loader
+
+		const theme = localStorage.getItem("theme");
+		if (theme) {
+			document.documentElement.setAttribute("data-theme", theme);
 		}
 
 		// Connect to the websocket
@@ -240,6 +254,7 @@ function App(): JSX.Element {
 		};
 		// The navigate function is a dependency of this effect, but we don't want to run this effect when it changes.
 	}, []);
+
 	return (
 		<AppContext.Provider value={appState}>
 			<FunctionContext.Provider value={appFunctions}>
