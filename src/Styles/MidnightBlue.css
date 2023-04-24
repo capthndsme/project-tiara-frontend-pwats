@@ -1,14 +1,12 @@
 html {
-   --darker-bg-colour: #0A0913;
-	--darker-bg-colour-translucent: hsla(246, 36%, 5%, 0.8);
-	--bg-colour: #131122;
-	--bg2-colour: #1D1936;
-	--bg2-colour-translucent: hsla(247, 33%, 10%, 0.8);
-	--blur-filter: 20px;
-	--saturation: 160%;
-	--bg3-colour: #282442;
-	--bg4-colour: hsl(309, 5%, 46%);
-	--light-colour: #f4ecf7;
-	--highlight-colour: hsl(248, 29%, 70%);
-	--second-colour: #282442;
+   --darker-bg-colour: #1a1a2e;
+	--darker-bg-colour-translucent: hsla(234, 39%, 10%, 0.8);
+	--bg-colour: #22223b;
+	--bg2-colour: #2a2a40;
+	--bg2-colour-translucent: hsla(235, 33%, 14%, 0.8);
+	--bg3-colour: #33334a;
+	--bg4-colour: hsl(309, 5%, 36%);
+	--light-colour: #eaeaea;
+	--highlight-colour: hsl(247, 66%, 77%);
+	--second-colour: #33334a;
 }
