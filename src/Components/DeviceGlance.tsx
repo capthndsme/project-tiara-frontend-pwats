@@ -3,10 +3,12 @@ import { useContext } from "react";
 import { FaThermometerHalf } from "react-icons/fa";
 import { WiHumidity } from "react-icons/wi";
 import { ActiveDeviceContext } from "./ActiveDeviceContext";
+import { HeatIndex, celsiusToFahrenheit, fahrenheitToCelsius } from "./HeatIndex";
 export function DeviceGlance() {
 	const activeDeviceContext = useContext(ActiveDeviceContext);
 	if (activeDeviceContext && activeDeviceContext.deviceIsOnline) {
 		let ThermometerView = <div>No temperature sensors</div>;
+		let HeatIndexView = <></>;
 		if (activeDeviceContext.deviceSensors && activeDeviceContext.deviceSensors.Thermometers) {
 			ThermometerView = (
 				<>
@@ -26,11 +28,21 @@ export function DeviceGlance() {
 					</div>
 				</>
 			);
+			let hIndex: number | null;
+			if (activeDeviceContext.deviceSensors.Thermometers.Inside?.Temperature && activeDeviceContext.deviceSensors.Thermometers.Inside?.Humidity) {
+				// TODO: Find a celsius-native heat index formula.
+				hIndex = HeatIndex(celsiusToFahrenheit(activeDeviceContext.deviceSensors.Thermometers.Inside?.Temperature), activeDeviceContext.deviceSensors.Thermometers.Inside?.Humidity);
+				if (hIndex) {
+					HeatIndexView = <div>Heat index: {fahrenheitToCelsius(hIndex).toFixed(2)}°C</div>;
+				}
+			}
+			
 		}
 		return (
 			<>
 				Last updated: {moment(activeDeviceContext.deviceLastUpdate).fromNow()}
 				{ThermometerView}
+				{HeatIndexView}
 				<br />
 			</>
 		);
