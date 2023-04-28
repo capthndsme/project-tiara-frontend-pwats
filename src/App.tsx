@@ -80,6 +80,7 @@ function App(): JSX.Element {
 						toast("Toggled " + name, { icon: val ? "🟢" : "🔴" });
 					}
 				}
+				const hasAnyError = hasError || !data.toggleSuccess;
 				setActiveDeviceState((state) => {
 					// Create a new copy of the state
 					const newState = { ...state };
@@ -96,8 +97,9 @@ function App(): JSX.Element {
 									hasLock: false,
 
 									// If there was an error, keep the old value.
-									toggleValue: hasError ? found.toggleValue : data.toggleValue ? true : false,
+									toggleValue:  hasAnyError ? found.toggleValue : data.toggleValue ? true : false,
 								};
+								 
 								// Replace the old object with the new one in the new array
 								newDeviceToggles[i] = newFound;
 							}
