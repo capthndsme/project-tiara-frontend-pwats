@@ -2,9 +2,9 @@ html[data-theme="teal"] {
    --darker-bg-colour: #303841;
 	--darker-bg-colour-translucent: hsla(210, 28%, 15%, 0.8);
 	--bg-colour: #3a4750;
-	--bg2-colour: #00adb5;
+	--bg2-colour: #396568;
 	--bg2-colour-translucent: hsla(180, 100%, 35%, 0.8);
-	--bg3-colour: #eeeeee;
+	--bg3-colour: #93c7ca;
 	--bg4-colour: hsl(309, 5%, 46%);
 	--light-colour: #f4ecf7;
 	--highlight-colour: hsl(183, 72%, 73%);
@@ -23,6 +23,20 @@ html[data-theme="midnightblue"] {
 	--bg4-colour: hsl(309, 5%, 46%);
 	--light-colour: #f4ecf7;
 	--highlight-colour: hsl(248, 29%, 70%);
+	--second-colour: #332f50;
+}
+html[data-theme="palenight"] {
+   --darker-bg-colour: #282C3D;
+	--darker-bg-colour-translucent: #282C3Dcc;
+	--bg-colour: linear-gradient(180deg, #34384C 0%, #282C3D 100%);
+	--bg2-colour: #424760;
+	--bg2-colour-translucent: #34384Cd7;
+	--blur-filter: 20px;
+	--saturation: 160%;
+	--bg3-colour: #404A68;
+	--bg4-colour: hsl(309, 5%, 46%);
+	--light-colour: #BFC7D5;
+	--highlight-colour: #C792EA;
 	--second-colour: #332f50;
 }
 html[data-theme="purpleorange"] {

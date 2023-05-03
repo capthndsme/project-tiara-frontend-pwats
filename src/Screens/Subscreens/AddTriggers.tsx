@@ -128,7 +128,7 @@ export function AddTriggers() {
 			<div className="maxWidth noPadding">
 				<div className="padding">Select a toggle to automate:</div>
 				<div className="toggleList">
-					<div className="toggleContainer">{controls}</div>
+					{controls}
 				</div>
 
 				{RenderOptions}

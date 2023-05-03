@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DeviceBaseToggle } from "../Types/DeviceBaseToggle";
+import { DeviceBaseToggle, ToggleType } from "../Types/DeviceBaseToggle";
 import { FunctionContext } from "./FunctionContext";
 import { toast } from "react-hot-toast";
 import moment from "moment";
@@ -27,12 +27,12 @@ export function DeviceToggle({ toggle }: { toggle: DeviceBaseToggle | null }) {
 		if (appFunctions && appFunctions.mutateToggle && toggle) appFunctions.mutateToggle(!toggle.toggleValue, toggle.toggleName);
 	}
 	let toggleClass = "";
-
-	if (toggle?.hasLock && toggle?.toggleValue) {
+	// If toggle is not oneoff, do not show the toggle as on if it is loading.
+	if (toggle?.hasLock && toggle?.toggleValue && toggle?.toggleType !== ToggleType.ONEOFF) {
 		toggleClass = "toggleLoading toggleOn";
 	} else if (toggle?.hasLock) {
 		toggleClass = "toggleLoading";
-	} else if (toggle?.toggleValue) {
+	} else if (toggle?.toggleValue && toggle?.toggleType !== ToggleType.ONEOFF) {
 		toggleClass = "toggleOn";
 	} else {
 		toggleClass = "";

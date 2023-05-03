@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { ActiveDeviceContext } from "./ActiveDeviceContext";
 import { DeviceToggle } from "./DeviceToggle";
+import { Link } from "react-router-dom";
 
 export function DeviceControls() {
    const localDevice = useContext(ActiveDeviceContext);
@@ -12,6 +13,7 @@ export function DeviceControls() {
       }
    }
 	return (<div className="deviceControls">
+      <Link to="/camera">Video Camera</Link>
       {controls}
    </div>);
 }

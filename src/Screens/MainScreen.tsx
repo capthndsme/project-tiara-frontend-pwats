@@ -14,9 +14,10 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 				<NavigationBar />
 				<Routes>
 					<Route path="/" element={<HomescreenView />} />
+					<Route path="/" element={<VideoCameraView />} />
 					<Route path="/triggers/*" element={<Triggers />} />
 					<Route path="/alerts" element={<Alerts />} />
-					<Route path="/video" element={<VideoCameraView />} />
+					<Route path="/camera" element={<VideoCameraView />} />
 					<Route path="/stats" element={<div>stats</div>} />
 					<Route path="/more" element={<More />} />
 				</Routes>
