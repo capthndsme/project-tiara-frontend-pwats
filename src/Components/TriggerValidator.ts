@@ -16,7 +16,7 @@ function createTimestampFromTime(time: SchedulerTime): number {
    // Create a timestamp from our SchedulerTime type
    // with date set to the Unix epoch so it wouldn't be unnecessarily large.
    // and maybe to be 32-bit compatible? But who cares about 32-bit anymore?
-	if (time.time) return new Date(1970, 0, 1, time.time[0], time.time[0], 0, 0).getTime();
+	if (time.time) return new Date(1970, 0, 1, time.time[0], time.time[1], 0, 0).getTime();
 	return Date.now();
 }
 
@@ -38,6 +38,7 @@ export function TriggerValidator(scheduledTask: ScheduledTask, toggleType: Toggl
 			// Check if the end time is lower than the start time by using the timestamp
 			createTimestampFromTime(scheduledTask.timeRange.from) >= createTimestampFromTime(scheduledTask.timeRange.to)
 		) {
+         console.log(scheduledTask.timeRange.from, scheduledTask.timeRange.to, createTimestampFromTime(scheduledTask.timeRange.from), createTimestampFromTime(scheduledTask.timeRange.to));
 			return ValidationErrors.TimeEndLower;
 		}
       

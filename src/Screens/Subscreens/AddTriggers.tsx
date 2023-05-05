@@ -214,7 +214,7 @@ export function AddTriggers() {
 										// There must be a better way to do this...
 										const localTimeRange: SchedulerRange = { 
 											to: newTime,
-											from: sched.timeRange?.from ? sched.timeRange.to : { time: [0, 0], lastExecuted: 0 }
+											from: sched.timeRange?.from ? sched.timeRange.from : { time: [0, 0], lastExecuted: 0 }
 										};
  
 										return {
