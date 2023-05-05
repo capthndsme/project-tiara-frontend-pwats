@@ -159,10 +159,23 @@ button {
 		border-radius 150ms ease-in-out;
 }
 
-.deviceControls > *:active {
+.deviceControls > *:active{
 	transform: scale(0.9);
 	font-size: 20px;
 	border-radius: 50%;
+	padding: 34px;
+}
+/* Because camera image takes up two blocks*/
+.cameraImage:active {
+
+	border-radius: 150px;
+}
+.cameraImage > a {
+	transition: padding 150ms ease-in-out;
+}
+.cameraImage > a:active {
+	transform: none;
+	border-radius: 0%;
 	padding: 34px;
 }
 .toggleOn {
