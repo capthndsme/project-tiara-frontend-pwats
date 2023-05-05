@@ -131,7 +131,7 @@ export function AddTriggers() {
 								setLocalScheduler((sched) => {
 									const every = sched.every;
 									if (every) return { ...sched, every: [...every.slice(0, i), ...every.slice(i + 1)] };
-									else return {...sched} // This should never happen
+									else return { ...sched }; // This should never happen
 								});
 							}}
 						>
@@ -165,6 +165,33 @@ export function AddTriggers() {
 					<section className={requireToggleType(ToggleType.SWITCH)}>
 						<h2 className="noMargin">Time-range triggers</h2>
 						<section className="triggerEditor">
+						<input
+							checked={localScheduler.timeRange ? true : false}
+							onClick={(e) => {
+
+								if (localScheduler.timeRange) {
+									// false, remove tempRange
+									setLocalScheduler(sched=>({
+										...sched, timeRange: null
+									}));
+								} else {
+									// Populate tempRange
+									setLocalScheduler(sched=>({
+										...sched, timeRange: {
+											from: {
+												time: [0, 0],
+												lastExecuted: 0
+											},
+											to: {
+												time: [0, 0],
+												lastExecuted: 0
+											}
+										}
+									}));
+								}
+							}}
+							type="checkbox"></input>
+							Use time-range triggers<br/>
 							This output will be turned on between <br />
 							<input
 								type="time"
@@ -182,16 +209,15 @@ export function AddTriggers() {
 
 									setLocalScheduler((sched) => {
 										// There must be a better way to do this...
-										const localTimeRange: SchedulerRange = { 
+										const localTimeRange: SchedulerRange = {
 											from: newTime,
-											to: sched.timeRange?.to ? sched.timeRange.to : { time: [0, 0], lastExecuted: 0 }
+											to: sched.timeRange?.to ? sched.timeRange.to : { time: [0, 0], lastExecuted: 0 },
 										};
- 
+
 										return {
 											...sched,
 											timeRange: localTimeRange,
 										};
-										
 									});
 								}}
 							/>
@@ -212,16 +238,15 @@ export function AddTriggers() {
 
 									setLocalScheduler((sched) => {
 										// There must be a better way to do this...
-										const localTimeRange: SchedulerRange = { 
+										const localTimeRange: SchedulerRange = {
 											to: newTime,
-											from: sched.timeRange?.from ? sched.timeRange.from : { time: [0, 0], lastExecuted: 0 }
+											from: sched.timeRange?.from ? sched.timeRange.from : { time: [0, 0], lastExecuted: 0 },
 										};
- 
+
 										return {
 											...sched,
 											timeRange: localTimeRange,
 										};
-										
 									});
 								}}
 							/>
@@ -232,6 +257,26 @@ export function AddTriggers() {
 					<section className={requireToggleType(ToggleType.SWITCH)}>
 						<h2 className="noMargin">Temperature-range triggers</h2>
 						<section className="triggerEditor">
+							<input
+							checked={localScheduler.tempRange ? true : false}
+							onClick={(e) => {
+
+								if (localScheduler.tempRange) {
+									// false, remove tempRange
+									setLocalScheduler(sched=>({
+										...sched, tempRange: null
+									}));
+								} else {
+									// Populate tempRange
+									setLocalScheduler(sched=>({
+										...sched, tempRange: [0, 0]
+									}));
+									
+								}
+							}}
+							type="checkbox"></input>
+							Use temperature triggers
+							<br />
 							Turn on when temperature is between
 							<input
 								className="triggerstyle triggerstylespace"
@@ -247,7 +292,8 @@ export function AddTriggers() {
 								}}
 								value={localScheduler.tempRange?.[0]}
 							/>
-							°C and
+							°C
+							<br /> and
 							<input
 								onChange={(val) => {
 									setLocalScheduler((sched) => {
@@ -263,8 +309,8 @@ export function AddTriggers() {
 								type="number"
 							/>
 							°C <br />
-							(The selected output will be turned off when the temperature is below this range, and will remain on when it is above
-							this range)
+							The selected output will be turned off when the temperature is below this range, and will remain on when it is above
+							this range
 						</section>
 					</section>
 				</div>

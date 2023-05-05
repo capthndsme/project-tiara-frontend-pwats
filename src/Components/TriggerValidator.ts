@@ -8,7 +8,7 @@ export enum ValidationErrors {
 	TimeEndLower = "End time is lower than start time",
 	DuplicateTime = "Duplicate time found",
 	NullTask = "Scheduled task is null",
-   EmptyTimes = "No times were specified",
+   EmptyTimes = "Trigger is empty.",
    ValidationPassed = "Validation passed",
 }
 
@@ -31,7 +31,12 @@ export function TriggerValidator(scheduledTask: ScheduledTask, toggleType: Toggl
 			}
 		}
 
+      // Switches validation 
+      let choices = 0;
 		// Time-range validation
+      if (scheduledTask.timeRange) choices++;
+      if (scheduledTask.tempRange) choices++;
+      if (choices===0) return ValidationErrors.EmptyTimes;
 		if (
 			scheduledTask.timeRange &&
          toggleType === ToggleType.SWITCH && // Only switch-type toggles have time range
