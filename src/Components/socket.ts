@@ -6,3 +6,7 @@ export const socket: Socket = io("wss://ptserver.capthndsme.xyz/client", {
    reconnection: true,
    reconnectionAttempts: Infinity
 });
+
+// For debugging purposes
+// @ts-ignore
+window.__DEBUG_SOCKET__ = socket; 

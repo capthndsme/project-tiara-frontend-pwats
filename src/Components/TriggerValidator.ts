@@ -43,13 +43,14 @@ export function TriggerValidator(scheduledTask: ScheduledTask, toggleType: Toggl
       
       // EveryTask validation: check if there are duplicate times
       let timestamps: number[] = [];
+      const every = scheduledTask.every;
       if (
-         scheduledTask.every &&
+         every &&
          toggleType === ToggleType.ONEOFF && // Only one-off type toggles have everytask 
-         scheduledTask.every.length === 0 || scheduledTask.every.length > 4 // Check if there are no times or more than 4 times
+         (every.length === 0 || every.length > 4) // Check if there are no times or more than 4 times
       ) {
-         for (let i = 0; i < scheduledTask.every.length; i++) {
-            const time = scheduledTask.every[i];
+         for (let i = 0; i < every.length; i++) {
+            const time = every[i];
             const timestamp = createTimestampFromTime(time);
             if (timestamps.includes(timestamp)) {
                return ValidationErrors.DuplicateTime;

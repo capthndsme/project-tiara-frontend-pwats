@@ -2,11 +2,12 @@ import { useContext, useState } from "react";
 import { ActiveDeviceContext } from "../../Components/ActiveDeviceContext";
 import { TopBar } from "../../Components/TopBar";
 import { SimpleBackButton } from "../../Components/SimpleBackButton";
-import { ScheduledTask, ScheduledTaskBase, SchedulerTime } from "../../Types/SchedulerTypes";
+import { ScheduledTask, ScheduledTaskBase, SchedulerRange, SchedulerTime } from "../../Types/SchedulerTypes";
 import { ToggleType } from "../../Types/DeviceBaseToggle";
 import { TriggerValidator, ValidationErrors } from "../../Components/TriggerValidator";
 import { toast } from "react-hot-toast";
 import { socket } from "../../Components/socket";
+import { DeviceReqStatus } from "../../Types/DeviceReqStatus";
 
 export function AddTriggers() {
 	const adc = useContext(ActiveDeviceContext);
@@ -36,7 +37,13 @@ export function AddTriggers() {
 			time: null,
 			lastExecuted: 0,
 		};
-		setLocalScheduler((sched) => ({ ...sched, every: [...sched.every, newTime] }));
+		const every = localScheduler.every;
+		if (!every) {
+			setLocalScheduler((sched) => ({ ...sched, every: [newTime] }));
+			return;
+		} else {
+			setLocalScheduler((sched) => ({ ...sched, every: [...every, newTime] }));
+		}
 	}
 	let RenderOptions = <></>;
 
@@ -57,24 +64,32 @@ export function AddTriggers() {
 				const validationPass: ValidationErrors = TriggerValidator(localScheduler, toggle.toggleType);
 				if (validationPass === ValidationErrors.ValidationPassed) {
 					// Save the trigger
-					setSaving (true);
+					setSaving(true);
+					let start = Date.now();
 					toast("Saving trigger");
 					console.log("Saving trigger...");
-					socket
-					.timeout(45000)
-					.emit("AddTriggerDevice", {
-						myTrigger: localScheduler,
-					}, (error: boolean, data: any) => {
-						if (error) {
-							setSaving(false);
-							return toast.error("Error saving trigger");
-						} 
-						if (data) {
-							toast.success("Trigger saved!");
-							console.log("Trigger saved!");
-							setSaving(false);
+					socket.timeout(45000).emit(
+						"AddTriggerDevice",
+						{
+							myTrigger: localScheduler,
+						},
+						(error: boolean, data: DeviceReqStatus) => {
+							console.log("Trigger save latency " + (Date.now() - start) + "ms");
+							if (error) {
+								setSaving(false);
+								return toast.error("Error saving trigger");
+							}
+							if (data.success) {
+								toast.success("Trigger saved!");
+								console.log("Trigger saved!");
+								setSaving(false);
+							} else {
+								toast.error("Error saving trigger: " + data.error);
+								console.log("Error saving trigger");
+								setSaving(false);
+							}
 						}
-					});
+					);
 				} else {
 					toast("Validation failed: " + validationPass, { icon: "❌" });
 					console.log("Validation failed: " + validationPass);
@@ -97,20 +112,27 @@ export function AddTriggers() {
 							type="time"
 							value={timeVal}
 							onChange={(val) => {
-								const newTime: SchedulerTime = {
-									time: [parseInt(val.target.value.split(":")[0]), parseInt(val.target.value.split(":")[1])],
-									lastExecuted: 0,
-								};
-								setLocalScheduler((sched) => ({
-									...sched,
-									every: [...sched.every.slice(0, i), newTime, ...sched.every.slice(i + 1)],
-								}));
+								const every = localScheduler.every;
+								if (every) {
+									const newTime: SchedulerTime = {
+										time: [parseInt(val.target.value.split(":")[0]), parseInt(val.target.value.split(":")[1])],
+										lastExecuted: 0,
+									};
+									setLocalScheduler((sched) => ({
+										...sched,
+										every: [...every.slice(0, i), newTime, ...every.slice(i + 1)],
+									}));
+								}
 							}}
 						/>
 						<button
 							className="refreshButton"
 							onClick={() => {
-								setLocalScheduler((sched) => ({ ...sched, every: [...sched.every.slice(0, i), ...sched.every.slice(i + 1)] }));
+								setLocalScheduler((sched) => {
+									const every = sched.every;
+									if (every) return { ...sched, every: [...every.slice(0, i), ...every.slice(i + 1)] };
+									else return {...sched} // This should never happen
+								});
 							}}
 						>
 							Remove
@@ -130,7 +152,11 @@ export function AddTriggers() {
 							Time triggers are triggered at a specific time of day. When your device is turned off before an automation is
 							triggered, it will be skipped.
 							{localScheduler.every?.length === 0 ? <center>No time triggers set.</center> : <>{everyTriggers}</>}
-							<button onClick={addTime} disabled={localScheduler.every?.length > 3} className="refreshButton">
+							<button
+								onClick={addTime}
+								disabled={localScheduler.every ? localScheduler.every.length > 3 : false}
+								className="refreshButton"
+							>
 								Add a time trigger ({localScheduler.every?.length}/4)
 							</button>
 						</section>
@@ -144,9 +170,9 @@ export function AddTriggers() {
 								type="time"
 								className="triggerstyle triggerstylespace"
 								value={
-									String(localScheduler.timeRange.from.time?.[0]).padStart(2, "0") +
+									String(localScheduler.timeRange?.from.time?.[0]).padStart(2, "0") +
 									":" +
-									String(localScheduler.timeRange.from.time?.[1]).padStart(2, "0")
+									String(localScheduler.timeRange?.from.time?.[1]).padStart(2, "0")
 								}
 								onChange={(val) => {
 									const newTime: SchedulerTime = {
@@ -156,12 +182,16 @@ export function AddTriggers() {
 
 									setLocalScheduler((sched) => {
 										// There must be a better way to do this...
-										let timeRangeClone = { ...sched.timeRange };
-										timeRangeClone.from = newTime;
+										const localTimeRange: SchedulerRange = { 
+											from: newTime,
+											to: sched.timeRange?.to ? sched.timeRange.to : { time: [0, 0], lastExecuted: 0 }
+										};
+ 
 										return {
 											...sched,
-											timeRange: timeRangeClone,
+											timeRange: localTimeRange,
 										};
+										
 									});
 								}}
 							/>
@@ -170,9 +200,9 @@ export function AddTriggers() {
 								className="triggerstyle triggerstylespace"
 								type="time"
 								value={
-									String(localScheduler.timeRange.to.time?.[0]).padStart(2, "0") +
+									String(localScheduler.timeRange?.to.time?.[0]).padStart(2, "0") +
 									":" +
-									String(localScheduler.timeRange.to.time?.[1]).padStart(2, "0")
+									String(localScheduler.timeRange?.to.time?.[1]).padStart(2, "0")
 								}
 								onChange={(val) => {
 									const newTime: SchedulerTime = {
@@ -182,12 +212,16 @@ export function AddTriggers() {
 
 									setLocalScheduler((sched) => {
 										// There must be a better way to do this...
-										let timeRangeClone = { ...sched.timeRange };
-										timeRangeClone.to = newTime;
+										const localTimeRange: SchedulerRange = { 
+											to: newTime,
+											from: sched.timeRange?.from ? sched.timeRange.to : { time: [0, 0], lastExecuted: 0 }
+										};
+ 
 										return {
 											...sched,
-											timeRange: timeRangeClone,
+											timeRange: localTimeRange,
 										};
+										
 									});
 								}}
 							/>
@@ -220,7 +254,7 @@ export function AddTriggers() {
 										const hasother = sched.tempRange?.[0];
 										return {
 											...sched,
-											tempRange: [ hasother ? hasother : 0, parseInt(val.target.value)],
+											tempRange: [hasother ? hasother : 0, parseInt(val.target.value)],
 										};
 									});
 								}}
@@ -250,7 +284,7 @@ export function AddTriggers() {
 				{RenderOptions}
 				<div className="padding">
 					<button onClick={validateAndSave} className="refreshButton" disabled={saving}>
-						{saving?"Saving...":"Save"}
+						{saving ? "Saving..." : "Save"}
 					</button>
 				</div>
 			</div>
