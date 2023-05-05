@@ -7,7 +7,7 @@ export enum ValidationErrors {
 	TempMaxLower = "Temperature is invalid. Make sure higher temperature is higher than lower temperature",
 	TimeEndLower = "End time is lower than start time",
 	DuplicateTime = "Duplicate time found",
-	NullTask = "Scheduled task is null",
+	NullTask = "Scheduled task is null (This should never happen, file a bug report)",
    EmptyTimes = "Trigger is empty.",
    ValidationPassed = "Validation passed",
 }
@@ -34,9 +34,12 @@ export function TriggerValidator(scheduledTask: ScheduledTask, toggleType: Toggl
       // Switches validation 
       let choices = 0;
 		// Time-range validation
-      if (scheduledTask.timeRange) choices++;
-      if (scheduledTask.tempRange) choices++;
-      if (choices===0) return ValidationErrors.EmptyTimes;
+      if (toggleType === ToggleType.SWITCH) {
+         if (scheduledTask.timeRange) choices++;
+         if (scheduledTask.tempRange) choices++;
+         if (choices===0) return ValidationErrors.EmptyTimes;
+      }
+      
 		if (
 			scheduledTask.timeRange &&
          toggleType === ToggleType.SWITCH && // Only switch-type toggles have time range
