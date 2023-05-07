@@ -17,8 +17,8 @@ import { ReqDevices } from "./Types/WS/ReqDevices";
 import { ActiveDeviceContext } from "./Components/ActiveDeviceContext";
 import { DeviceStateUpdate } from "./Types/DeviceStateUpdate";
 import { DefaultDeviceState, DeviceState } from "./Types/DeviceState";
-import { ToggleStateMutateAcknowledge } from "./Types/ToggleStateMutateAcknowledge";
 import { DeviceBaseToggle } from "./Types/DeviceBaseToggle";
+import { ToggleWithStatus } from "./Types/WS/ToggleWithStatus";
 
 function App(): JSX.Element {
 	const navigate = useRef(useNavigate());
@@ -69,18 +69,18 @@ function App(): JSX.Element {
 				toggleValue: val,
 				hasLock: true, // We will lock it so other clients don't try to change it.
 			},
-			(hasError: boolean, data: ToggleStateMutateAcknowledge) => {
+			(hasError: boolean, data: ToggleWithStatus) => {
 				if (hasError) {
 					console.log("Toggle has error");
 					toast.error("Failed to set toggle. Please try again later.");
 				} else {
-					if (!data.toggleSuccess && data.toggleError) {
-						toast.error("Error toggling: " + data.toggleError);
+					if (!data.toggleResult.success) {
+						toast.error("Error toggling: " + data.toggleResult.message ?? "Unknown error");
 					} else {
 						toast("Toggled " + name, { icon: val ? "🟢" : "🔴" });
 					}
 				}
-				const hasAnyError = hasError || !data.toggleSuccess;
+				const hasAnyError = hasError || !data.toggleResult.success;
 				setActiveDeviceState((state) => {
 					// Create a new copy of the state
 					const newState = { ...state };
