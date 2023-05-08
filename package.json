@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-helmet": "^6.1.6"
+    "@types/react-helmet": "^6.1.6",
+    "react-git-info": "^2.0.1"
   }
 }

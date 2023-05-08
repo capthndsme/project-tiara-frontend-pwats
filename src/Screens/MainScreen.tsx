@@ -7,6 +7,7 @@ import { More } from "./More";
 import NavigationBar from "../Components/NavigationBar";
 import { VideoCameraView } from "./VideoCameraView";
 import { AppTheme } from "./Subscreens/AppTheme";
+import { About } from "./About";
 
 export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 	if (connectedOnce) {
@@ -21,6 +22,7 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 					<Route path="/camera" element={<VideoCameraView />} />
 					<Route path="/stats" element={<div>stats</div>} />
 					<Route path="/more/themes" element={<AppTheme />} />
+					<Route path="/more/about" element={<About />} />
 					<Route path="/more" element={<More />} />
 				</Routes>
 			</>
