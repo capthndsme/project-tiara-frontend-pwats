@@ -10,6 +10,7 @@ export enum ValidationErrors {
 	NullTask = "Scheduled task is null (This should never happen, file a bug report)",
    EmptyTimes = "Trigger is empty.",
    ValidationPassed = "Validation passed",
+   TriggerNoName = "Trigger name is empty",
 }
 
 function createTimestampFromTime(time: SchedulerTime): number {
@@ -34,6 +35,7 @@ export function TriggerValidator(scheduledTask: ScheduledTask, toggleType: Toggl
       // Switches validation 
       let choices = 0;
 		// Time-range validation
+      if (scheduledTask.outputName === "" || scheduledTask.outputName === null) return ValidationErrors.TriggerNoName;
       if (toggleType === ToggleType.SWITCH) {
          if (scheduledTask.timeRange) choices++;
          if (scheduledTask.tempRange) choices++;

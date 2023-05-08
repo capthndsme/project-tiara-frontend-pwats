@@ -48,7 +48,7 @@ export function Triggers() {
 		<Routes>
 			<Route path="/" element={<TriggerScreen triggers={triggers} />} />
 			<Route path="/add" element={<AddTriggers/>} />
-			<Route path="/edit/:id" element={<EditTrigger/>} />
+			<Route path="/edit/:id" element={<EditTrigger triggers={triggers}/>} />
 		</Routes>
 		
 	</div>

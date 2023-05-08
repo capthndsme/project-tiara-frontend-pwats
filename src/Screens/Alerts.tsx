@@ -6,11 +6,13 @@ import { toast } from "react-hot-toast";
 import moment from "moment";
 import { GenericCallbackResultWithData } from "../Types/GenericCallbackResultWithData";
 import { NotificationType } from "../Types/NotificationType";
+import Delayed from "../Components/Delayed";
 
 export function Alerts() {
 	const [alerts, setAlerts] = useState<Array<NotificationEntity>>([]);
 	const [alertsFilter, setAlertsFilter] = useState<NotificationType | null>(null);
 	const [filterInclude, setFilterInclude] = useState<boolean>(true);
+ 
 	useEffect(() => {
 		if (socket.disconnected) {
 			socket.connect();
@@ -23,7 +25,7 @@ export function Alerts() {
 				setAlerts(data.data);
 			}
 		});
-	});
+	}, []);
 	let localAlerts;
 	if (alertsFilter) {
 		localAlerts = alerts.filter((alert) => {
@@ -78,18 +80,22 @@ export function Alerts() {
 					</select>
 				</div>
 				{localAlerts.length === 0 ? (
-					<div style={{ textAlign: "center" }}> No alerts to show. <br/>
-                    {(alertsFilter||!filterInclude) ? "Try changing the filter." : ""}
-                    </div>
+					<div style={{ textAlign: "center" }}>
+			 
+						No alerts to show. <br />
+						{alertsFilter || !filterInclude ? "Try changing the filter." : ""}
+					</div>
 				) : (
 					localAlerts.map((alert, index) => {
 						return (
-							<div className="alertEntry" key={index}>
-								<div className="alertTitle"> {alert.title} </div>
-								<div className="alertTime"> {moment(alert.sentTimestamp).format("YYYY-MM-DD HH:mm")} </div>
+							<Delayed delay={index * 15}>
+								<div className="alertEntry" key={index}>
+									<div className="alertTitle"> {alert.title} </div>
+									<div className="alertTime"> {moment(alert.sentTimestamp).format("YYYY-MM-DD HH:mm")} </div>
 
-								<div className="alertBody"> {alert.message} </div>
-							</div>
+									<div className="alertBody"> {alert.message} </div>
+								</div>
+							</Delayed>
 						);
 					})
 				)}

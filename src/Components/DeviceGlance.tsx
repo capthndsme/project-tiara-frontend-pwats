@@ -41,7 +41,7 @@ export function DeviceGlance() {
 		}
 		return (
 			<>
-				Last updated: {moment(activeDeviceContext.deviceLastUpdate).fromNow()}
+				Last updated: {moment(activeDeviceContext.deviceLastUpdate?? 0 - 10000).fromNow()}
 				{ThermometerView}
 				{HeatIndexView}
 				<br />

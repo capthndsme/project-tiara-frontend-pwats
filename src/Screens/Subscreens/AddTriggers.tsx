@@ -23,6 +23,7 @@ export function AddTriggers() {
 					key={i}
 					onClick={() => {
 						console.log("Set Active Key", i);
+						setLocalScheduler((sched) => ({ ...sched, outputName: adc?.deviceToggles?.[i]?.toggleName ?? "" }));
 						setActiveKey(i);
 					}}
 					className={i === activeKey ? "deviceToggle activeToggle" : "deviceToggle"}
@@ -46,7 +47,7 @@ export function AddTriggers() {
 		}
 	}
 	let RenderOptions = <></>;
-
+	
 	function requireToggleType(type: ToggleType): string {
 		if (adc.deviceToggles) {
 			const toggle = adc.deviceToggles[activeKey];

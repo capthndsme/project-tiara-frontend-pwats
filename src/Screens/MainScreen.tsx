@@ -8,6 +8,7 @@ import NavigationBar from "../Components/NavigationBar";
 import { VideoCameraView } from "./VideoCameraView";
 import { AppTheme } from "./Subscreens/AppTheme";
 import { About } from "./About";
+import { StatsScreen } from "./StatsScreen";
 
 export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 	if (connectedOnce) {
@@ -20,7 +21,7 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 					<Route path="/triggers/*" element={<Triggers />} />
 					<Route path="/alerts" element={<Alerts />} />
 					<Route path="/camera" element={<VideoCameraView />} />
-					<Route path="/stats" element={<div>stats</div>} />
+					<Route path="/stats" element={<StatsScreen/>} />
 					<Route path="/more/themes" element={<AppTheme />} />
 					<Route path="/more/about" element={<About />} />
 					<Route path="/more" element={<More />} />

@@ -45,7 +45,7 @@ export function DeviceToggle({ toggle }: { toggle: DeviceBaseToggle | null }) {
 				<div className="toggleSmall">
 					Last selected:
 					<br />
-					{moment(toggle?.lastChanged).fromNow()}
+					{moment(toggle.lastChanged??0-10000).fromNow()}
 				</div>
 			</div>
 		);
