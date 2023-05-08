@@ -28,7 +28,7 @@ html[data-theme="midnightblue"] {
 html[data-theme="palenight"] {
    --darker-bg-colour: #282C3D;
 	--darker-bg-colour-translucent: #282C3Dcc;
-	--bg-colour: linear-gradient(180deg, #34384C 0%, #282C3D 100%);
+	--bg-colour: linear-gradient(180deg, #34384C 0%, #282C3D 100%) no-repeat center fixed;
 	--bg2-colour: #424760;
 	--bg2-colour-translucent: #34384Cd7;
 	--blur-filter: 20px;

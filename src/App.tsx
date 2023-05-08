@@ -17,7 +17,7 @@ import { ReqDevices } from "./Types/WS/ReqDevices";
 import { ActiveDeviceContext } from "./Components/ActiveDeviceContext";
 import { DeviceStateUpdate } from "./Types/DeviceStateUpdate";
 import { DefaultDeviceState, DeviceState } from "./Types/DeviceState";
-import { DeviceBaseToggle } from "./Types/DeviceBaseToggle";
+import { DeviceBaseToggle, ToggleType } from "./Types/DeviceBaseToggle";
 import { ToggleWithStatus } from "./Types/WS/ToggleWithStatus";
 
 function App(): JSX.Element {
@@ -28,9 +28,9 @@ function App(): JSX.Element {
 	// const [activeHwid, setActiveHwid] = useState("");
 	const [activeDeviceState, setActiveDeviceState] = useState<DeviceState>(DefaultDeviceState);
 
-	function mutateToggle(val: boolean, name: string) {
+	function mutateToggle(val: boolean, toggle: DeviceBaseToggle) {
 		console.log("Received toggle mutate request.");
-		console.log("Toggle name: ", name);
+		console.log("Toggle name: ", toggle?.toggleName);
 		console.log("Toggle value: ", val);
 
 		// Lock our local toggle so it doesn't get changed
@@ -38,6 +38,13 @@ function App(): JSX.Element {
 		// This is done by setting the hasLock property to true.
 
 		// If this fixes the error, lets see what we can type this as.
+		if (toggle.toggleType === ToggleType.ONEOFF) {
+			// One off is not a toggle, so we need to toast as such.
+			 toast("Executing " + toggle.toggleDescription , { icon: "⌛" , duration: 4000 });
+			
+		} else {
+			toast("Toggling " + toggle.toggleDescription, { icon: "⌛", duration: 4000  });
+		}
 		setActiveDeviceState((state) => {
 			// Create a new copy of the state
 			const newState = { ...state };
@@ -45,8 +52,10 @@ function App(): JSX.Element {
 			const newDeviceToggles = [...state.deviceToggles];
 			// Find and update the toggle in the new array
 			for (let i = 0; i < newDeviceToggles.length; i++) {
-				if (newDeviceToggles[i]?.toggleName === name) {
+				if (newDeviceToggles[i] === toggle) {
+ 
 					const found = newDeviceToggles[i];
+					 
 					if (found) {
 						// Create a new copy of the found object with the updated property
 						// Mutate last changed to the current time (Doesn't matter if we use the server time or not)
@@ -65,7 +74,7 @@ function App(): JSX.Element {
 		socket.timeout(40000).emit(
 			"ToggleStateMutate",
 			{
-				toggleName: name,
+				toggleName: toggle?.toggleName,
 				toggleValue: val,
 				hasLock: true, // We will lock it so other clients don't try to change it.
 			},
@@ -75,12 +84,26 @@ function App(): JSX.Element {
 					toast.error("Failed to set toggle. Please try again later.");
 				} else {
 					if (!data.toggleResult.success) {
-						toast.error("Error toggling: " + data.toggleResult.message ?? "Unknown error");
+						if (toggle.toggleType === ToggleType.ONEOFF) {
+							// One off is not a toggle, so we need to toast as such.
+							console.log("Toggle error", data.toggleResult)
+							toast.error("Error executing "  + toggle.toggleDescription +  ": " + data.toggleResult.message ?? "Unknown error");
+						} else {
+							toast.error("Error toggling "  + toggle.toggleDescription +  ": " + data.toggleResult.message ?? "Unknown error");
+						}
+						
 					} else {
-						toast("Toggled " + name, { icon: val ? "🟢" : "🔴" });
+						if (toggle.toggleType === ToggleType.ONEOFF) {
+							// One off is not a toggle, so we need to toast as such.
+							toast(toggle.toggleDescription + " finished successfully!", { icon: "🟢"  });
+						} else {
+							toast("Toggled " + toggle.toggleDescription, { icon: val ? "🟢" : "🔴" });
+						}
+						
 					}
 				}
 				const hasAnyError = hasError || !data.toggleResult.success;
+				console.log("Has any error: ", hasAnyError);
 				setActiveDeviceState((state) => {
 					// Create a new copy of the state
 					const newState = { ...state };
@@ -88,7 +111,9 @@ function App(): JSX.Element {
 					const newDeviceToggles = [...state.deviceToggles];
 					// Find and update the toggle in the new array
 					for (let i = 0; i < newDeviceToggles.length; i++) {
-						if (newDeviceToggles[i]?.toggleName === name) {
+						// Because we are doing a spread operator, we need to check if the toggleName is the same.
+						if (newDeviceToggles[i]?.toggleName === toggle.toggleName) {
+ 
 							const found = newDeviceToggles[i];
 							if (found) {
 								// Create a new copy of the found object with the updated property
@@ -97,9 +122,9 @@ function App(): JSX.Element {
 									hasLock: false,
 
 									// If there was an error, keep the old value.
-									toggleValue:  hasAnyError ? found.toggleValue : data.toggleValue ? true : false,
+									toggleValue:  hasAnyError ? found.toggleValue : (data.toggleValue ? true : false),
 								};
-								 
+								 console.log("Done mutating toggle. Lets see what we got: ", newFound);
 								// Replace the old object with the new one in the new array
 								newDeviceToggles[i] = newFound;
 							}
@@ -124,6 +149,9 @@ function App(): JSX.Element {
 		const themebg = localStorage.getItem("theme-custombg");
 		if (theme) {
 			document.documentElement.setAttribute("data-theme", theme);
+			document.documentElement.style.backgroundSize = "unset";
+		} else {
+			document.documentElement.setAttribute("data-theme", "");
 			document.documentElement.style.backgroundSize = "unset";
 		}
 		if (themebg) {

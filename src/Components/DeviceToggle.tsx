@@ -24,7 +24,7 @@ export function DeviceToggle({ toggle }: { toggle: DeviceBaseToggle | null }) {
 			console.log("Toggle already pending...");
 			return;
 		}
-		if (appFunctions && appFunctions.mutateToggle && toggle) appFunctions.mutateToggle(!toggle.toggleValue, toggle.toggleName);
+		if (appFunctions && appFunctions.mutateToggle && toggle) appFunctions.mutateToggle(!toggle.toggleValue, toggle);
 	}
 	let toggleClass = "";
 	// If toggle is not oneoff, do not show the toggle as on if it is loading.

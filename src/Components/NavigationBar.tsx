@@ -35,16 +35,16 @@ export default function NavigationBar() {
 					<div className="label">Triggers</div>
 				</Link>
 
-				<Link className={checkActive("/alerts")} to="/alerts">
+				<Link className={checkActiveStart("/alerts")} to="/alerts">
 					<HiOutlineBell size="32" />
 					<div className="label">Alerts</div>
 				</Link>
 
-				<Link className={checkActive("/stats")} to="/stats">
+				<Link className={checkActiveStart("/stats")} to="/stats">
 					<HiOutlineChartBarSquare size="32" />
 					<div className="label">Stats</div>
 				</Link>
-				<Link className={checkActive("/more")} to="/more">
+				<Link className={checkActiveStart("/more")} to="/more">
 					<HiOutlineBars3 size="32" />
 					<div className="label">More</div>
 				</Link>

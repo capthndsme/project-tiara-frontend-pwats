@@ -385,6 +385,7 @@ html {
 }
 html {
 	background: var(--bg-colour);
+	transition: background 350ms ease-in-out;
 }
 body {
 	font-family: "Inter", sans-serif;
@@ -400,7 +401,7 @@ body {
 	justify-content: center;
 	align-items: center;
 }
-html,
+ 
 body,
 .App,
 .screen,
@@ -409,17 +410,33 @@ body,
 	height: 100%;
 	min-height: 100%;
 }
+@keyframes show {
+	from {
+		transform: scale(0.8);
+		opacity: 0.7;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+* {
+	transition: background 350ms ease-in-out, background-color 350ms ease-in-out;
+}
 .screen {
 	padding-left: 300px;
-	transition: padding 350ms ease-in-out;
+	transition: padding 350ms ease-in-out, opacity 250ms ease-in-out, transform 250ms ease-in-out;
 	min-height: 100%;
 	height: 100%;
+	animation: show 250ms ease-in-out;
 }
+
 #NavigationBar {
 	position: fixed;
 	user-select: none;
 	left: 0;
 	bottom: 0;
+	transition: background 350ms ease-in-out;
 	width: 300px;
 	height: 100%;
 	z-index: 10;
@@ -427,7 +444,50 @@ body,
 	background: var(--darker-bg-colour-translucent);
 	transition: width 350ms ease-in-out;
 }
-
+.alertEntry, .genericEntry {
+	background: var(--bg2-colour);
+	border-radius: 12px;
+	overflow: hidden;
+	margin-bottom: 16px;
+}
+.genericNormalMargins {
+	margin: 0px;
+}
+ 
+.appLink {
+	display: block;
+	width: 100%;
+	text-decoration: none;
+	color: white;
+	padding: 12px 16px;
+}
+/*  Make me a caret on the right side.*/
+.appLink::after {
+	content: "›";
+	float: right;
+}
+.alertTitle, .genericTitle {
+	font-size: 16px;
+	display: block;
+	padding: 10px 12px 0px 12px;
+	color: white;
+}
+.alertTime, .genericSecondLine {
+	font-size: 14px;
+	display: block;
+	padding: 0px 12px 0px 12px;
+	margin-top: 4px;
+ 
+}
+.alertBody, .genericBody{
+	margin-top: 8px;
+	width: 100%;
+	display: inline-block;
+	background-color: var(--darker-bg-colour);
+ 
+	padding: 12px 12px 12px 12px;
+	color: white;
+}
 .InputStyle {
 	background: var(--bg3-colour);
 	border: none;
@@ -566,11 +626,14 @@ p {
 #TopBar {
 	position: sticky;
 	top: 0px;
+	z-index: 10;
+
 	left: 0px;
 	width: 100%;
 }
 .InnerTopBar {
 	width: 100%;
+	transition: background 350ms ease-in-out;
 	text-align: center;
 	display: flex;
 	align-items: center;
@@ -591,6 +654,8 @@ p {
 	background: none;
 	padding: none;
 	margin: none;
+	padding-top: 4px;
+	margin-right: 8px;;
 	display: block;
 }
 @media only screen and (max-width: 1000px) {
@@ -748,4 +813,87 @@ Breakpoint for mobile devices
 }
 .maxWidth {
 	padding-bottom: 64px;
+}
+
+ 
+html {
+	width: 100%;
+}
+
+.switch {
+position: relative;
+display: inline-block;
+margin: 0px 8px;
+width: 32px;
+height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+/* The slider */
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 20px;
+width: 20px;
+left: 0px;
+bottom: 0px;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: var(--highlight-colour);
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px var(--highlight-colour);
+}
+
+input:checked + .slider:before {
+transform: translateX(12px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 34px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
+.filterLine {
+	display: flex;
+	align-items: center;
+	border-bottom: var(--bg2-colour) 1px solid;
+	margin-bottom: 12px;
+}
+
+.alignCentre {
+	display: flex;
+	align-items: center;
+	 
+}
+.leftRightSplit {
+	display: flex;
+	justify-content: space-between;
+ 
 }
