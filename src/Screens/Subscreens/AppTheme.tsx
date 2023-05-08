@@ -24,6 +24,7 @@ export function AppTheme() {
             }}
             >
 					<option value="_DEF_">Default</option>
+					<option value="dusk">Dusk</option>
 					<option value="teal">Teal</option>
 					<option value="midnightblue">Midnight Blue</option>
 					<option value="palenight">Palenight</option>

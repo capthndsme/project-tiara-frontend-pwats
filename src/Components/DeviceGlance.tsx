@@ -26,6 +26,7 @@ export function DeviceGlance() {
 							{activeDeviceContext.deviceSensors.Thermometers.Outside?.Humidity.toFixed(2)}% outside{" "}
 						</div>
 					</div>
+					System temp: {activeDeviceContext.deviceSensors.Thermometers.CPU?.Temperature.toFixed(2)}°C 
 				</>
 			);
 			let hIndex: number | null;

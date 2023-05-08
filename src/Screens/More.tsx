@@ -8,7 +8,7 @@ export function More() {
 		<div className="screen">
 			<TopBar> More </TopBar>
 			<div className="maxWidth">
-				<div style={{ padding: "8px 12px" }}>PROFILE</div>
+				<div style={{ padding: "8px 12px" }}>Profile</div>
 				<div className="genericEntry noMargin">
 					<div className="optionOnly">
 					@{localStorage.getItem("username")}
@@ -22,7 +22,7 @@ export function More() {
 					</Link>
 				</div>
 
-				<div style={{ padding: "8px 12px", marginTop: "16px" }}>CUSTOMISATION</div>
+				<div style={{ padding: "8px 12px", marginTop: "16px" }}>Customisation</div>
 				<div className="genericEntry noMargin">
 					<Link to="/more/themes" className="appLink">
 						App Theme
@@ -32,15 +32,18 @@ export function More() {
 					</Link>
 				</div>
 
-				<div style={{ padding: "8px 12px", marginTop: "16px" }}>ABOUT</div>
+				<div style={{ padding: "8px 12px", marginTop: "16px" }}>About</div>
 				<div className="genericEntry noMargin gx">
-					<div className="optionOnly">
-						project-tiara-frontend@{gitInfo.commit.shortHash} <br />
-						built at {moment(gitInfo.commit.date).format("YYYY-MM-DD HH:mm")}
-					</div>
+					
 					<Link to="/more/about" className="appLink">
 						About Project Tiara
 					</Link>
+					<div style={{
+						opacity: 0.7
+					}}className="optionOnly">
+						project-tiara-frontend@{gitInfo.commit.shortHash} <br />
+						built at {moment(gitInfo.commit.date).format("YYYY-MM-DD HH:mm")}
+					</div>
 				</div>
 			</div>
 		</div>

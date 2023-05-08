@@ -6,6 +6,7 @@ import { DeviceReqStatus } from "../Types/DeviceReqStatus";
 import { ScheduledTask } from "../Types/SchedulerTypes";
 import { TriggerScreen } from "./Subscreens/TriggerScreen";
 import { AddTriggers } from "./Subscreens/AddTriggers";
+import { EditTrigger } from "./Subscreens/EditTrigger";
 
 export function Triggers() {
 	// Load triggers
@@ -47,6 +48,7 @@ export function Triggers() {
 		<Routes>
 			<Route path="/" element={<TriggerScreen triggers={triggers} />} />
 			<Route path="/add" element={<AddTriggers/>} />
+			<Route path="/edit/:id" element={<EditTrigger/>} />
 		</Routes>
 		
 	</div>

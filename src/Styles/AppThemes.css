@@ -39,6 +39,20 @@ html[data-theme="palenight"] {
 	--highlight-colour: #C792EA;
 	--second-colour: #332f50;
 }
+html[data-theme="dusk"] {
+   --darker-bg-colour: #16181f;
+	--darker-bg-colour-translucent: #14101577;
+	--bg-colour: linear-gradient(180deg, #1e181f 0%, #2b313e 100%) no-repeat center fixed;
+	--bg2-colour: #4f5162;
+	--bg2-colour-translucent: #34384Cd7;
+	--blur-filter: 20px;
+	--saturation: 160%;
+	--bg3-colour: #56607b;
+	--bg4-colour: hsl(309, 5%, 46%);
+	--light-colour: #f2f3e9;
+	--highlight-colour: #c275c9;
+	--second-colour: #332f50;
+}
 html[data-theme="purpleorange"] {
 	--darker-bg-colour: #1f2041;
 	--darker-bg-colour-translucent: hsla(240, 38%, 12%, 0.8);
