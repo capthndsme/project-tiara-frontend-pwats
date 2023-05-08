@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { SimpleBackButton } from "../../Components/SimpleBackButton";
 import { TopBar } from "../../Components/TopBar";
 import { FunctionContext } from "../../Components/FunctionContext";
@@ -15,6 +15,7 @@ export function AppTheme() {
 				Select theme
 				<select className="refreshButton"
             style={{ height: "30px" }}
+				defaultValue={localStorage.getItem("theme") || "_DEF_"}
             onChange={(e) => {
                
                localStorage.setItem("theme", e.target.value);
