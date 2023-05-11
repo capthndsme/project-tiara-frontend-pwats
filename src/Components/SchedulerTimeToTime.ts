@@ -1,4 +1,4 @@
-import { SchedulerTime } from "../Types/SchedulerTypes";
+ 
 
 export function SchedulerTimeToTime(time: [number, number] | null) {
       if (time!==null && time[0]===null && time[1]===null) {

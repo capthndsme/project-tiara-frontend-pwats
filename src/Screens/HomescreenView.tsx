@@ -9,7 +9,7 @@ export function HomescreenView() {
 			<Helmet>
 				<meta name="theme-color" content="#3a3539" />
 			</Helmet>
-			<div className="maxWidth">
+			<div className="maxWidth" style={{maxWidth:600}}>
 				<DeviceSelector />
 				<DeviceGlance />
 				<DeviceControls />

@@ -9,13 +9,15 @@ export type FunctionContextType = {
    setActiveDeviceState: React.Dispatch<React.SetStateAction<DeviceState>>;
    reloadTheme: () => void;
    mutateToggle: (val: boolean, name: DeviceBaseToggle) => void;
+   authenticate: () => void,
    
 }
 export const DefaultFunctionContext: FunctionContextType = {
    setAppState: () => { },
    setActiveDeviceState: () => { },
    reloadTheme: () => { },
-   mutateToggle: () => {}
+   mutateToggle: () => {},
+   authenticate: () => {}
 };
 
 export const FunctionContext = createContext<Partial<FunctionContextType>>(DefaultFunctionContext);

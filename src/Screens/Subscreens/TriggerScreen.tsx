@@ -88,11 +88,12 @@ export function TriggerScreen({ triggers }: { triggers: Array<ScheduledTask> }) 
 		return (
 			<div>
 				<TopBar float={true}> Automation and Triggers </TopBar>
-				<div className="maxWidth">
-					{TriggersMap}
-					<Link to="/triggers/add" className="refreshButton">
+				<div className="maxWidth">					<Link to="/triggers/add" className="refreshButton">
 						Add a trigger
 					</Link>
+					
+					{TriggersMap}
+
 					</div>
 				
 			</div>

@@ -27,7 +27,75 @@ function App(): JSX.Element {
 	const [connectedOnce, setConnectedOnce] = useState<boolean>(false);
 	// const [activeHwid, setActiveHwid] = useState("");
 	const [activeDeviceState, setActiveDeviceState] = useState<DeviceState>(DefaultDeviceState);
+	function authenticate() {
+		const user = localStorage.getItem("username");
+		const session = localStorage.getItem("session");
+		let emitStart = Date.now();
+		socket.emit(
+			"authenticate",
+			{
+				username: user,
+				session: session,
+			},
+			(data: any) => {
+				console.log("[WebSockets] Authentication took " + (Date.now() - emitStart) + "ms");
+				if (data.success) {
+					toast("Connected to the server.", { icon: "🌐" });
+					setAppState((appState) => ({ ...appState, authenticated: true, accountId: data.accountId, connected: true }));
+					socket.timeout(6000).emit("requestDeviceList", { accountId: data.accountId }, (err: Boolean, requestData: ReqDevices) => {
+						if (err) {
+							toast.error("Failed to get device list.");
+							return;
+						}
+						// Move ConnectedOnce here. ConnectedOnce significies that we have connected to the server at least once.
+						// and have received a list of devices.
+						setConnectedOnce(true);
+						if (requestData.devices) {
+							if (requestData.devices.length === 0) {
+								// Show a message saying that there are no devices
+								toast.error("No devices found.");
 
+								setActiveDeviceState((localState) => {
+									localState.deviceDetails = undefined;
+									return localState;
+								});
+							} else {
+								// We have more than one device, so we need to select one.
+								// By default, we select the first device.
+								const device = requestData.devices[0];
+								console.log("Selecting default device:", device);
+								setActiveDeviceState(requestData.firstDeviceStateCache);
+
+								const toggles = requestData.firstDeviceStateCache.deviceToggles;
+								// We know for sure that the device sends an array of DeviceBaseToggle,
+								// so we can safely cast it to an array of DeviceBaseToggle.
+								console.log("Our toggles", toggles);
+
+								setAppState((appState) => ({ ...appState, devices: requestData.devices }));
+							}
+						}
+					});
+					socket.on("deviceStateUpdate", (data: DeviceStateUpdate) => {
+						setActiveDeviceState((prevState) => {
+							return {
+								...prevState,
+								deviceToggles: data.deviceToggles,
+								deviceSensors: data.deviceSensors,
+								deviceIsOnline: data.deviceIsOnline,
+								deviceLastUpdate: data.deviceLastUpdate,
+							};
+						});
+					});
+				} else {
+					toast.error("Authentication failed.");
+					localStorage.removeItem("session");
+
+					setAppState((appState) => ({ ...appState, authenticated: false, connected: true }));
+					navigate.current("/login");
+				}
+			}
+		);
+	}
 	function mutateToggle(val: boolean, toggle: DeviceBaseToggle) {
 		console.log("Received toggle mutate request.");
 		console.log("Toggle name: ", toggle?.toggleName);
@@ -40,10 +108,9 @@ function App(): JSX.Element {
 		// If this fixes the error, lets see what we can type this as.
 		if (toggle.toggleType === ToggleType.ONEOFF) {
 			// One off is not a toggle, so we need to toast as such.
-			 toast("Executing " + toggle.toggleDescription , { icon: "⌛" , duration: 4000 });
-			
+			toast("Executing " + toggle.toggleDescription, { icon: "⌛", duration: 4000 });
 		} else {
-			toast("Toggling " + toggle.toggleDescription, { icon: "⌛", duration: 4000  });
+			toast("Toggling " + toggle.toggleDescription, { icon: "⌛", duration: 4000 });
 		}
 		setActiveDeviceState((state) => {
 			// Create a new copy of the state
@@ -53,9 +120,8 @@ function App(): JSX.Element {
 			// Find and update the toggle in the new array
 			for (let i = 0; i < newDeviceToggles.length; i++) {
 				if (newDeviceToggles[i] === toggle) {
- 
 					const found = newDeviceToggles[i];
-					 
+
 					if (found) {
 						// Create a new copy of the found object with the updated property
 						// Mutate last changed to the current time (Doesn't matter if we use the server time or not)
@@ -70,8 +136,8 @@ function App(): JSX.Element {
 			// Return the newState from the callback function
 			return newState;
 		});
-
-		socket.timeout(40000).emit(
+		// Extend our timeout to 65 seconds to account for the server->device->server->client round trip.
+		socket.timeout(65000).emit(
 			"ToggleStateMutate",
 			{
 				toggleName: toggle?.toggleName,
@@ -86,20 +152,18 @@ function App(): JSX.Element {
 					if (!data.toggleResult.success) {
 						if (toggle.toggleType === ToggleType.ONEOFF) {
 							// One off is not a toggle, so we need to toast as such.
-							console.log("Toggle error", data.toggleResult)
-							toast.error("Error executing "  + toggle.toggleDescription +  ": " + data.toggleResult.message ?? "Unknown error");
+							console.log("Toggle error", data.toggleResult);
+							toast.error("Error executing " + toggle.toggleDescription + ": " + data.toggleResult.message ?? "Unknown error");
 						} else {
-							toast.error("Error toggling "  + toggle.toggleDescription +  ": " + data.toggleResult.message ?? "Unknown error");
+							toast.error("Error toggling " + toggle.toggleDescription + ": " + data.toggleResult.message ?? "Unknown error");
 						}
-						
 					} else {
 						if (toggle.toggleType === ToggleType.ONEOFF) {
 							// One off is not a toggle, so we need to toast as such.
-							toast(toggle.toggleDescription + " finished successfully!", { icon: "🟢"  });
+							toast(toggle.toggleDescription + " finished successfully!", { icon: "🟢" });
 						} else {
 							toast("Toggled " + toggle.toggleDescription, { icon: val ? "🟢" : "🔴" });
 						}
-						
 					}
 				}
 				const hasAnyError = hasError || !data.toggleResult.success;
@@ -113,7 +177,6 @@ function App(): JSX.Element {
 					for (let i = 0; i < newDeviceToggles.length; i++) {
 						// Because we are doing a spread operator, we need to check if the toggleName is the same.
 						if (newDeviceToggles[i]?.toggleName === toggle.toggleName) {
- 
 							const found = newDeviceToggles[i];
 							if (found) {
 								// Create a new copy of the found object with the updated property
@@ -122,9 +185,9 @@ function App(): JSX.Element {
 									hasLock: false,
 
 									// If there was an error, keep the old value.
-									toggleValue:  hasAnyError ? found.toggleValue : (data.toggleValue ? true : false),
+									toggleValue: hasAnyError ? found.toggleValue : data.toggleValue ? true : false,
 								};
-								 console.log("Done mutating toggle. Lets see what we got: ", newFound);
+								console.log("Done mutating toggle. Lets see what we got: ", newFound);
 								// Replace the old object with the new one in the new array
 								newDeviceToggles[i] = newFound;
 							}
@@ -141,8 +204,9 @@ function App(): JSX.Element {
 	const appFunctions: FunctionContextType = {
 		setAppState,
 		setActiveDeviceState,
-		reloadTheme, 
+		reloadTheme,
 		mutateToggle,
+		authenticate,
 	};
 	function reloadTheme() {
 		const theme = localStorage.getItem("theme");
@@ -186,72 +250,8 @@ function App(): JSX.Element {
 		// Authenticate the user
 
 		socket.on("connect", () => {
-			let emitStart = Date.now();
 			setAppState((appState) => ({ ...appState, connected: true }));
-			socket.emit(
-				"authenticate",
-				{
-					username: user,
-					session: session,
-				},
-				(data: any) => {
-					console.log("[WebSockets] Authentication took " + (Date.now() - emitStart) + "ms");
-					if (data.success) {
-						toast("Connected to the server.", { icon: "🌐" });
-						setAppState((appState) => ({ ...appState, authenticated: true, accountId: data.accountId, connected: true }));
-						socket.timeout(6000).emit("requestDeviceList", { accountId: data.accountId }, (err: Boolean, requestData: ReqDevices) => {
-							if (err) {
-								toast.error("Failed to get device list.");
-								return;
-							}
-							// Move ConnectedOnce here. ConnectedOnce significies that we have connected to the server at least once.
-							// and have received a list of devices.
-							setConnectedOnce(true);
-							if (requestData.devices) {
-								if (requestData.devices.length === 0) {
-									// Show a message saying that there are no devices
-									toast.error("No devices found.");
-
-									setActiveDeviceState((localState) => {
-										localState.deviceDetails = undefined;
-										return localState;
-									});
-								} else {
-									// We have more than one device, so we need to select one.
-									// By default, we select the first device.
-									const device = requestData.devices[0];
-									console.log("Selecting default device:", device);
-									setActiveDeviceState(requestData.firstDeviceStateCache);
-
-									const toggles = requestData.firstDeviceStateCache.deviceToggles;
-									// We know for sure that the device sends an array of DeviceBaseToggle,
-									// so we can safely cast it to an array of DeviceBaseToggle.
-									console.log("Our toggles", toggles);
-
-									setAppState((appState) => ({ ...appState, devices: requestData.devices }));
-								}
-							}
-						});
-						socket.on("deviceStateUpdate", (data: DeviceStateUpdate) => {
-							setActiveDeviceState((prevState) => {
-								return {
-									...prevState,
-									deviceToggles: data.deviceToggles,
-									deviceSensors: data.deviceSensors,
-									deviceIsOnline: data.deviceIsOnline,
-									deviceLastUpdate: data.deviceLastUpdate,
-								};
-							});
-						});
-					} else {
-						toast.error("Authentication failed.");
-						localStorage.removeItem("session");
-
-						setAppState((appState) => ({ ...appState, authenticated: false, connected: true }));
-						navigate.current("/login");
-					}
-				}
-			);
+			authenticate();
 		});
 		socket.on("toggleStateUpdate", (d: DeviceBaseToggle) => {
 			console.log("toggle state received", d);

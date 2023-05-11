@@ -3,6 +3,7 @@ import { ActiveDeviceContext } from "./ActiveDeviceContext";
 import { DeviceToggle } from "./DeviceToggle";
 import { Link } from "react-router-dom";
 import Delayed from "./Delayed";
+import { CameraImage } from "./CameraImage";
 
 export function DeviceControls() {
 	const localDevice = useContext(ActiveDeviceContext);
@@ -17,14 +18,7 @@ export function DeviceControls() {
 	return (
 		<div className="deviceControls">
 			<Delayed delay={125}>
-				<div className="cameraImage">
-					<Link to="/camera">Video Camera</Link>
-					<img
-						className="cameraBehind"
-						alt="Camera Preview of your device."
-						src={"https://ptserver.capthndsme.xyz/preview_images/" + localDevice.deviceDetails?.DeviceHWID + ".jpg"}
-					></img>
-				</div>
+				<CameraImage hwid={localDevice.deviceDetails?.DeviceHWID} />
 			</Delayed>
 
 			{controls}

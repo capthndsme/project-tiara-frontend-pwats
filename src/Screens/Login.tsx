@@ -52,8 +52,9 @@ export function Login() {
 							authenticated: true,
 							accountId: data.accountId,
 							connected: true,
-						}));
-					window.location.reload(); // Reload the page since the user is now logged in.
+					}));
+					if (functionContext.authenticate) functionContext.authenticate();
+					navigate("/");
 					// This is a user interface issue. The user should be redirected to the main screen.
 				} else {
 					toast.error("Failed to log in. Check your username and password.");
@@ -136,8 +137,16 @@ export function Login() {
 							Sign up
 						</Link>
 					</div>
+					
 				</div>
- 
+				<Link to="/about" style={{
+					textAlign: "center",
+					display: "block",
+					color: "white",
+					marginTop: 8
+				}}>
+					About 
+				</Link>
 			</div>
 			
 		</div>

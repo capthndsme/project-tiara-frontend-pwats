@@ -6,9 +6,8 @@ import { TopBar } from "../Components/TopBar";
 import { GetStats } from "../Components/GetStats";
 import { toast } from "react-hot-toast";
 import { TimestampAgo } from "../Components/TimestampAgo";
-import { ThermometerRegions } from "../Types/DeviceSensors";
-import { WithTimestamp } from "../Types/WithTimestamp";
-import { dmGet } from "../Components/dmGet";
+ 
+ 
 import moment from "moment";
 
 export function StatsScreen() {
@@ -36,7 +35,7 @@ export function StatsScreen() {
 		);
 	} else {
 		let chartData = [];
-		let TempArray: Array<WithTimestamp<TempCombined>> = [];
+		 
       // Simple reverse loop to get the last 1000 entries
 		for (let i = data.length-1; i >= 0; i--) {
 			if (data[i].MetricType === "TEMP_COMBINED") {
