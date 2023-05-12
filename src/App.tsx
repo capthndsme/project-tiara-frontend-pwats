@@ -19,6 +19,8 @@ import { DeviceStateUpdate } from "./Types/DeviceStateUpdate";
 import { DefaultDeviceState, DeviceState } from "./Types/DeviceState";
 import { DeviceBaseToggle, ToggleType } from "./Types/DeviceBaseToggle";
 import { ToggleWithStatus } from "./Types/WS/ToggleWithStatus";
+import { About } from "./Screens/About";
+import { AppTheme } from "./Screens/Subscreens/AppTheme";
 
 function App(): JSX.Element {
 	const navigate = useRef(useNavigate());
@@ -54,7 +56,7 @@ function App(): JSX.Element {
 							if (requestData.devices.length === 0) {
 								// Show a message saying that there are no devices
 								toast.error("No devices found.");
-
+								
 								setActiveDeviceState((localState) => {
 									localState.deviceDetails = undefined;
 									return localState;
@@ -149,6 +151,7 @@ function App(): JSX.Element {
 					console.log("Toggle has error");
 					toast.error("Failed to set toggle. Please try again later.");
 				} else {
+					console.log("Got result,", data);
 					if (!data.toggleResult.success) {
 						if (toggle.toggleType === ToggleType.ONEOFF) {
 							// One off is not a toggle, so we need to toast as such.
@@ -303,6 +306,8 @@ function App(): JSX.Element {
 					<DisconnectedOverlay disconnected={!appState.connected} />
 
 					<Routes>
+					<Route path="/about" element={<About />} />
+					<Route path="/theme" element={<AppTheme />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/*" element={<MainScreen connectedOnce={connectedOnce} />} />
 					</Routes>

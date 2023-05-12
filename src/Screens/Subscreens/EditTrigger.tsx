@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ActiveDeviceContext } from "../../Components/ActiveDeviceContext";
 import { TopBar } from "../../Components/TopBar";
 import { SimpleBackButton } from "../../Components/SimpleBackButton";
@@ -15,7 +15,7 @@ export function EditTrigger({ triggers }: { triggers: Array<ScheduledTask> }) {
 	const { id } = useParams();
 	const [activeKey, setActiveKey] = useState(-1);
 	const [saving, setSaving] = useState(false);
-
+	const deviceToggles = useRef(adc.deviceToggles ?? []);
 	const [localScheduler, setLocalScheduler] = useState<ScheduledTask>(ScheduledTaskBase);
 
 	let controls = [];
@@ -23,16 +23,16 @@ export function EditTrigger({ triggers }: { triggers: Array<ScheduledTask> }) {
 		const localTrigger = triggers.find((trigger) => trigger.outputName === id);
 		setLocalScheduler(localTrigger || ScheduledTaskBase);
 		console.log("LOCAL TRIGGER", localTrigger);
-		let getKeyFromTrigger = adc.deviceToggles?.findIndex((foundTgl) => foundTgl?.toggleName === localTrigger?.outputName);
+		let getKeyFromTrigger = deviceToggles.current?.findIndex((foundTgl) => foundTgl?.toggleName === localTrigger?.outputName);
 
 		setActiveKey(getKeyFromTrigger ?? -1);
-	}, [triggers]);
+	}, [triggers, id]);
 	if (triggers.length === 0) {
 		return <>Triggers loading...</>;
 	}
 	// A simple selection screen for toggles
 	if (adc.deviceToggles) {
-		for (let i = 0; i < adc.deviceToggles.length; i++) {
+		for (let i = 0; i < deviceToggles.current.length; i++) {
 			controls.push(
 				<div
 					key={i}
@@ -63,8 +63,8 @@ export function EditTrigger({ triggers }: { triggers: Array<ScheduledTask> }) {
 	let RenderOptions = <></>;
 
 	function requireToggleType(type: ToggleType): string {
-		if (adc.deviceToggles) {
-			const toggle = adc.deviceToggles[activeKey];
+		if (deviceToggles.current) {
+			const toggle = deviceToggles.current[activeKey];
 			if (toggle) {
 				return toggle.toggleType === type ? "dt" : "dt disabled";
 			}
@@ -74,7 +74,7 @@ export function EditTrigger({ triggers }: { triggers: Array<ScheduledTask> }) {
 	}
 	function validateAndSave() {
 		if (adc.deviceToggles) {
-			const toggle = adc.deviceToggles[activeKey];
+			const toggle = deviceToggles.current[activeKey];
 			if (toggle) {
 				const validationPass: ValidationErrors = TriggerValidator(localScheduler, toggle.toggleType);
 				if (validationPass === ValidationErrors.ValidationPassed) {

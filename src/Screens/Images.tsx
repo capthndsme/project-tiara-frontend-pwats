@@ -40,7 +40,7 @@ export function Images() {
 			</div>
 		);
 	}
-	let animFrame;
+ 
 	return (
 		<div
 			className="fullscreen"
@@ -103,6 +103,7 @@ export function Images() {
 				</div>
 			</TopBar>
 			<img
+			alt="Camera snapshot."
 				onWheel={(e) => {
 					if (gridMode) return;
                if (gridRef.current) {
@@ -177,7 +178,7 @@ export function Images() {
 			</button>
 			<div
 				style={{
-					transition: "transform 0.2s ease-in-out",
+ 
 					transform: uiShow ? "translateY(0)" : "translateY(130px)",
 				}}
             ref={gridRef}
@@ -220,7 +221,7 @@ export function Images() {
 								setQuality("-small.jpg");
 							}}
 						>
-							<img src={(image.cdn ?? "") + image.fileHash + "-micro.jpg"} loading="lazy"></img>
+							<img alt="thumbnail" src={(image.cdn ?? "") + image.fileHash + "-micro.jpg"} loading="lazy"></img>
 						</div>
 					);
 				})}

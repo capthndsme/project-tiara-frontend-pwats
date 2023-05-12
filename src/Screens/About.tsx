@@ -57,9 +57,9 @@ export function About() {
 					Source code
 				</h2>
 				<p>
-					<a target="_blank" style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Frontend</a> - This powers this very app. TypeScript, create-react-app, PWA<br />
-					<a target="_blank" style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Backend</a> - The backend server. TypeScript<br />
-					<a target="_blank" style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Device code</a> - The device code, to be executed in a Raspberry Pi or similar. TypeScript, and one Arduino C++<br />
+					<a target="_blank" rel="noreferrer"  style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Frontend</a> - This powers this very app. TypeScript, create-react-app, PWA<br />
+					<a target="_blank" rel="noreferrer" style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Backend</a> - The backend server. TypeScript<br />
+					<a target="_blank" rel="noreferrer" style={{ color: "white" }} href="https://github.com/capthndsme/project-tiara-frontend-pwats">Device code</a> - The device code, to be executed in a Raspberry Pi or similar. TypeScript, and one Arduino C++<br />
 					<i>Paper will be uploaded when we successfully defend the title.</i>
  
 				</p>

@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { ActiveDeviceContext } from "./ActiveDeviceContext";
 import { DeviceToggle } from "./DeviceToggle";
-import { Link } from "react-router-dom";
+  
+
 import Delayed from "./Delayed";
 import { CameraImage } from "./CameraImage";
 

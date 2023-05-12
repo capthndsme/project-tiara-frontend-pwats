@@ -6,7 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { Toaster } from "react-hot-toast";
-import { About } from "./Screens/About";
+import { Signup } from "./Screens/Signup";
+ 
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -14,7 +15,7 @@ root.render(
 		<div className="App">
 			<BrowserRouter>
 				<Routes>
-					<Route path="/about" element={<About />} />
+					<Route path="/signup" element={<Signup/>} />
 					<Route path="/*" element={<App />} />
 				</Routes>
 			</BrowserRouter>

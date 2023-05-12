@@ -6,13 +6,16 @@ import { toast } from "react-hot-toast";
 import moment from "moment";
 import { GenericCallbackResultWithData } from "../Types/GenericCallbackResultWithData";
 import { NotificationType } from "../Types/NotificationType";
+ 
 import Delayed from "../Components/Delayed";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 export function Alerts() {
 	const [alerts, setAlerts] = useState<Array<NotificationEntity>>([]);
 	const [alertsFilter, setAlertsFilter] = useState<NotificationType | null>(null);
 	const [filterInclude, setFilterInclude] = useState<boolean>(true);
- 
+	const [pendingClear, setPendingClear] = useState<boolean>(false);
 	useEffect(() => {
 		if (socket.disconnected) {
 			socket.connect();
@@ -25,6 +28,10 @@ export function Alerts() {
 				setAlerts(data.data);
 			}
 		});
+		return () => {
+			socket.off("GetNotifications");
+			MySwal.close();
+		}
 	}, []);
 	let localAlerts;
 	if (alertsFilter) {
@@ -79,9 +86,44 @@ export function Alerts() {
 							})}
 					</select>
 				</div>
+				<button
+					className="refreshButton"
+					style={{
+						display: (localAlerts.length === 0) ? "none" : "block",
+					}}
+					disabled={(localAlerts.length === 0 || pendingClear)}
+					onClick={() => {
+						MySwal.fire({
+							title: "Clear alerts?",
+							text: "Are you sure you want to clear all alerts?",
+							icon: "warning",
+							background: "var(--darker-bg-colour)",
+
+							showCancelButton: true,
+							confirmButtonText: "Yes, logout!",
+							cancelButtonText: "No, cancel!",
+							cancelButtonColor: "var(--bg-colour)",
+							confirmButtonColor: "var(--highlight-colour)",
+							reverseButtons: true,
+						})
+						.then(res=> {
+							if (res.isConfirmed) {
+								setPendingClear(true)
+								socket
+								.volatile 
+								.timeout(5000)
+								.emit("ClearNotifications", {}, (err: Boolean, data: never) => {
+									setPendingClear(false);
+									setAlerts([]);
+								});
+							}
+						})
+					}}
+				>
+					Clear notifications
+				</button>
 				{localAlerts.length === 0 ? (
 					<div style={{ textAlign: "center" }}>
-			 
 						No alerts to show. <br />
 						{alertsFilter || !filterInclude ? "Try changing the filter." : ""}
 					</div>

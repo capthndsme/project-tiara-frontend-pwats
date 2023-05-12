@@ -52,7 +52,7 @@ export function Login() {
 							authenticated: true,
 							accountId: data.accountId,
 							connected: true,
-					}));
+						}));
 					if (functionContext.authenticate) functionContext.authenticate();
 					navigate("/");
 					// This is a user interface issue. The user should be redirected to the main screen.
@@ -124,11 +124,28 @@ export function Login() {
 					<center className="mediumTextHeight">Sign-in required.</center>
 					Username
 					<br />
-					<input className="InputStyle" ref={usernameRef}></input>
+					<input
+						className="InputStyle"
+						ref={usernameRef}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								handleSubmission();
+							}
+						}}
+					></input>
 					<br />
 					Password
 					<br />
-					<input className="InputStyle" ref={passwordRef} type="password"></input>
+					<input
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								handleSubmission();
+							}
+						}}
+						className="InputStyle"
+						ref={passwordRef}
+						type="password"
+					></input>
 					<div className="pad flexbtn">
 						<button onClick={handleSubmission} className={"InputStyle loginbtns highlight " + (loading ? "disabled" : "")}>
 							Login
@@ -137,18 +154,36 @@ export function Login() {
 							Sign up
 						</Link>
 					</div>
-					
 				</div>
-				<Link to="/about" style={{
-					textAlign: "center",
-					display: "block",
-					color: "white",
-					marginTop: 8
-				}}>
-					About 
-				</Link>
+				<div style={{ display: "flex", justifyContent: "center" }}>
+					{/**
+					 * These are links that does not require authentication.
+					 * I'm not entirely sure why we should allow theming without authentication, but
+					 * we will allow it for... accessibility reasons?
+					 */}
+					<Link
+						to="/about"
+						style={{
+							display: "inline-block",
+							color: "white",
+							marginTop: 8,
+						}}
+					>
+						About
+					</Link>
+					<Link
+						to="/theme"
+						style={{
+							display: "inline-block",
+							color: "white",
+							marginTop: 8,
+							marginLeft: 16,
+						}}
+					>
+						Theme
+					</Link>
+				</div>
 			</div>
-			
 		</div>
 	);
 }
