@@ -12,7 +12,7 @@ export function SimpleBackButton({optionalFn}:{optionalFn?: () => void}) {
          }
          
       }} className="backButton">
-          <BsArrowLeft fontSize={20} color="white"/>
+          <BsArrowLeft fontSize={20} />
       </button>
 
    )

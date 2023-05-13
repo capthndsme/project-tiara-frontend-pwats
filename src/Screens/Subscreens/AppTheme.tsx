@@ -3,8 +3,8 @@ import { SimpleBackButton } from "../../Components/SimpleBackButton";
 import { TopBar } from "../../Components/TopBar";
 import { FunctionContext } from "../../Components/FunctionContext";
 
-export function AppTheme() { 
-   const AppFunctions = useContext(FunctionContext)
+export function AppTheme() {
+	const AppFunctions = useContext(FunctionContext);
 	return (
 		<div className="screen">
 			<TopBar float={true} leftToRight={true}>
@@ -13,22 +13,26 @@ export function AppTheme() {
 			</TopBar>
 			<div className="maxWidth">
 				Select theme
-				<select className="refreshButton"
-            style={{ height: "30px" }}
-				defaultValue={localStorage.getItem("theme") || "_DEF_"}
-            onChange={(e) => {
-               
-               localStorage.setItem("theme", e.target.value);
-               if (e.target.value === "_DEF_") localStorage.removeItem("theme");
-               if (AppFunctions && AppFunctions.reloadTheme) AppFunctions.reloadTheme();
-            }}
-            >
+				<select
+					className="refreshButton"
+					style={{ height: "30px" }}
+					defaultValue={localStorage.getItem("theme") || "_DEF_"}
+					onChange={(e) => {
+						localStorage.setItem("theme", e.target.value);
+						if (e.target.value === "_DEF_") localStorage.removeItem("theme");
+						if (AppFunctions && AppFunctions.reloadTheme) AppFunctions.reloadTheme();
+					}}
+				>
 					<option value="_DEF_">Default</option>
+					<option value="light">Default Light</option>
 					<option value="dusk">Dusk</option>
-					<option value="teal">Teal</option>
+					<option value="green">Green</option>
+					<option value="blue">Light blue</option>
 					<option value="midnightblue">Midnight Blue</option>
+					<option value="orange">Orange</option>
 					<option value="palenight">Palenight</option>
 					<option value="purpleorange">Purple and Orange</option>
+					<option value="teal">Teal</option>
 				</select>
 			</div>
 		</div>

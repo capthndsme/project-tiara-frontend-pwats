@@ -8,7 +8,8 @@ export function DeviceSelector() {
 	if (!activeDeviceContext) return (<></>);
 	 
 	return (<>
-	{activeDeviceContext.deviceDetails?.AccessType === "owner" ? "My Home" : "%owner's home"}
+
+	{activeDeviceContext.deviceDetails?.AccessType === "owner" ? "My Home" : "@" + activeDeviceContext.deviceDetails?.AccessType + "'s doghouse"/* Access type is either "owner" or owner's username . */}
 	<h1 className="noMargin">{activeDeviceContext.deviceDetails?.DeviceName}</h1>
 	</>);
 }

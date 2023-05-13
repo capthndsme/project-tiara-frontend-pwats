@@ -1,5 +1,5 @@
 html[data-theme="teal"] {
-   --darker-bg-colour: #303841;
+	--darker-bg-colour: #303841;
 	--darker-bg-colour-translucent: hsla(210, 28%, 15%, 0.8);
 	--bg-colour: #3a4750;
 	--bg2-colour: #396568;
@@ -11,11 +11,42 @@ html[data-theme="teal"] {
 	--second-colour: #282442;
 }
 
+html[data-theme="light"] {
+	color: black;
+	--darker-bg-colour: #eee5f1;
+	--darker-bg-colour-translucent: hsla(283, 14%, 71%, 0.906);
+	--bg-colour: #ddd5df;
+	--bg2-colour: #b4a2b9;
+	--bg2-colour-translucent: hsla(309, 5%, 70%, 0.9);
+ 
+	--saturation: 160%;
+	--bg3-colour: hsl(312, 28%, 63%);
+	--bg4-colour: hsl(310, 29%, 36%);
+	--light-colour: black;
+	--highlight-colour: #472842;
+	--second-colour: #b17fa7;
+}
+html[data-theme="light"] .cameraImage > a , html[data-theme="light"] .toggleOn{
+	color: white;
+}
+html[data-theme="light"] .activeLink svg {
+	color: var(--highlight-colour)  
+}
+
+ html[data-theme="light"] .backButton, html[data-theme="light"] svg{
+	color: #000;
+}
+
+ 
+/** LoggedOutScreen is not affected by dark mode */
+#LoggedOutScreen {
+	color: white;
+}
 html[data-theme="midnightblue"] {
-   --darker-bg-colour: #0A0913;
+	--darker-bg-colour: #0a0913;
 	--darker-bg-colour-translucent: hsla(246, 36%, 5%, 0.8);
 	--bg-colour: linear-gradient(180deg, #131122 0%, #1c192c 100%);
-	--bg2-colour: #1D1936;
+	--bg2-colour: #1d1936;
 	--bg2-colour-translucent: #1d1936d7;
 	--blur-filter: 20px;
 	--saturation: 160%;
@@ -26,25 +57,25 @@ html[data-theme="midnightblue"] {
 	--second-colour: #332f50;
 }
 html[data-theme="palenight"] {
-   --darker-bg-colour: #282C3D;
-	--darker-bg-colour-translucent: #282C3Dcc;
-	--bg-colour: linear-gradient(180deg, #34384C 0%, #282C3D 100%) no-repeat center fixed;
+	--darker-bg-colour: #282c3d;
+	--darker-bg-colour-translucent: #282c3dcc;
+	--bg-colour: linear-gradient(180deg, #34384c 0%, #282c3d 100%) no-repeat center fixed;
 	--bg2-colour: #424760;
-	--bg2-colour-translucent: #34384Cd7;
+	--bg2-colour-translucent: #34384cd7;
 	--blur-filter: 20px;
 	--saturation: 160%;
-	--bg3-colour: #404A68;
+	--bg3-colour: #404a68;
 	--bg4-colour: hsl(309, 5%, 46%);
-	--light-colour: #BFC7D5;
-	--highlight-colour: #C792EA;
+	--light-colour: #bfc7d5;
+	--highlight-colour: #c792ea;
 	--second-colour: #332f50;
 }
 html[data-theme="dusk"] {
-   --darker-bg-colour: #16181f;
+	--darker-bg-colour: #16181f;
 	--darker-bg-colour-translucent: #14101577;
 	--bg-colour: linear-gradient(180deg, #1e181f 0%, #2b313e 100%) no-repeat center fixed;
 	--bg2-colour: #4f5162;
-	--bg2-colour-translucent: #34384Cd7;
+	--bg2-colour-translucent: #34384cd7;
 	--blur-filter: 20px;
 	--saturation: 160%;
 	--bg3-colour: #56607b;
@@ -53,15 +84,65 @@ html[data-theme="dusk"] {
 	--highlight-colour: #c275c9;
 	--second-colour: #332f50;
 }
+html[data-theme="blue"] {
+	--darker-bg-colour: #182024;
+	--darker-bg-colour-translucent: #2c80b8cc;
+	--bg-colour: #252b35;
+	--bg2-colour: #374d6b;
+	--bg2-colour-translucent: hsla(171, 5%, 30%, 0.8);
+ 
+	--bg3-colour: hsl(212, 29%, 50%);
+	--bg4-colour: hsl(205, 5%, 46%);
+	--light-colour: #d5eaee;
+	--highlight-colour: #7acaf0;
+	--second-colour: #73a3ba;
+}
+html[data-theme="orange"] {
+	--darker-bg-colour: #241e18;
+	--darker-bg-colour-translucent: #201e1dcc;
+	--bg-colour: #352f2b;
+	--bg2-colour: #6b5337;
+	--bg2-colour-translucent: hsla(34, 5%, 30%, 0.8);
+ 
+	--bg3-colour: hsl(36, 24%, 46%);
+	--bg4-colour: hsl(205, 5%, 46%);
+	--light-colour: #eeded5;
+	--highlight-colour: #f0b97a;
+	--second-colour: #ba9b73;
+}
+html[data-theme="green"] {
+	--darker-bg-colour: #18241f;
+	--darker-bg-colour-translucent: #18241fcc;
+	--bg-colour: #243b34;
+	--bg2-colour: #376b4e;
+	--bg2-colour-translucent: hsla(34, 5%, 30%, 0.8);
+ 
+	--bg3-colour: hsl(36, 5%, 38%);
+	--bg4-colour: hsl(205, 5%, 46%);
+	--light-colour: #d5eee4;
+	--highlight-colour: #7af0ab;
+	--second-colour: #ba9b73;
+}
 html[data-theme="purpleorange"] {
 	--darker-bg-colour: #1f2041;
-	--darker-bg-colour-translucent: hsla(240, 38%, 12%, 0.8);
+	--darker-bg-colour-translucent: hsla(36, 69%, 64%, 0.8);
 	--bg-colour: #4b3f72;
-	--bg2-colour: #e06969;
+	--bg2-colour: #362e4e;
 	--bg2-colour-translucent: hsla(0, 100%, 70%, 0.8);
 	--bg3-colour: #ffe7e7;
 	--bg4-colour: hsl(309, 5%, 46%);
-	--light-colour: #f4ecf7;
-	--highlight-colour: hsl(248, 29%, 70%);
+	--light-colour: #d69595;
+	--highlight-colour: hsl(248, 100%, 81%);
 	--second-colour: #282442;
 }
+
+html[data-theme="purpleorange"]  #NavigationBar svg,  html[data-theme="purpleorange"]  #NavigationBar .label {
+	color: var(--darker-bg-colour);
+}
+ 
+
+html[data-theme="purpleorange"]  #NavigationBar .activeLink svg,  html[data-theme="purpleorange"]  #NavigationBar .activeLink .label, html[data-theme="purpleorange"] .InnerTopBar, html[data-theme="purpleorange"] .InnerTopBar svg  {
+	color: var(--bg-colour);
+}
+ 
+ 

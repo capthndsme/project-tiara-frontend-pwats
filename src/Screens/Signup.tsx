@@ -17,7 +17,7 @@ export function Signup() {
 		if (localStorage.getItem("session") && localStorage.getItem("username")) {
 			navigate("/", {replace: true})
 		}
-	},[])
+	},[navigate])
 	return (
 		<div
 			id="LoggedOutScreen"
