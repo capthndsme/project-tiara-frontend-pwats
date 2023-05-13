@@ -61,7 +61,7 @@ export function More() {
 						}}
 						className="optionOnly"
 					>
-						<a target="_blank" rel="noreferer noopener" style={{color:"var(--highlight-colour)"}} href={"https://github.com/capthndsme/project-tiara-frontend-pwats/commit/" + gitInfo.commit.hash}>project-tiara-frontend@{gitInfo.commit.shortHash}</a><br />
+						<a target="_blank" rel="noreferrer noopener" style={{color:"var(--highlight-colour)"}} href={"https://github.com/capthndsme/project-tiara-frontend-pwats/commit/" + gitInfo.commit.hash}>project-tiara-frontend@{gitInfo.commit.shortHash}</a><br />
 						built at {moment(gitInfo.commit.date).format("YYYY-MM-DD HH:mm")}
 					</div>
 				</div>
