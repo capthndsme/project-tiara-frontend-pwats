@@ -38,7 +38,13 @@ button {
 	position: relative;
 	overflow: hidden;
 }
-
+.refreshButton:disable, input[type="submit"]:disable {
+	opacity: 0.5;
+}
+.refreshButton:disabled, input[type="submit"]:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
 .cameraBehind {
 	object-fit: cover;
 	position: absolute;
@@ -175,9 +181,8 @@ button {
 	margin: 0;
 	margin-top: 16px;
 }
-.refreshButton:disable, input[type="submit"]:disable {
-	opacity: 0.5;
-}
+
+ 
 .deviceControls > * {
 	aspect-ratio: 1;
 	box-shadow: rgba(24, 24, 24, 0.3) 0px 3px 10px;
@@ -967,7 +972,13 @@ Breakpoint for mobile devices
 .toggleList {
 	width: 100%;
 }
+.appLink{
+	cursor: pointer;
 
+}
+.appLink:hover, .optionOnly:hover {
+	background: var(--darker-bg-colour);
+}
 .toggleContainer {
 	overflow: none;
 	width: 100%;

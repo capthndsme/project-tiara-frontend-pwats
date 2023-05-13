@@ -13,6 +13,8 @@ import { About } from "./About";
 import { Logout } from "./Subscreens/Logout";
 import { SessionsScreen } from "./Subscreens/SessionsScreen";
 import { Images } from "./Images";
+import { Share } from "./Share";
+import { ShareAccept } from "./ShareAccept";
 
 export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 	if (connectedOnce) {
@@ -21,6 +23,7 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 				<NavigationBar />
 				<Routes>
 					<Route path="/" element={<HomescreenView />} />
+					<Route path="/share/:hash" element={<ShareAccept />} />
 					<Route path="/triggers/*" element={<Triggers />} />
 					<Route path="/alerts" element={<Alerts />} />
 					<Route path="/camera" element={<VideoCameraView />} />
@@ -28,6 +31,7 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 					<Route path="/more/pics" element={<Images />} />
 					<Route path="/more/logout" element={<Logout />} />
 					<Route path="/more/sessions" element={<SessionsScreen />} />
+					<Route path="/more/share" element={<Share />} />
 					<Route path="/more/about" element={<About />} />
 					<Route path="/more/themes" element={<AppTheme />} />
 					<Route path="/more" element={<More />} />

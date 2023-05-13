@@ -18,6 +18,7 @@
 	overflow-y: scroll;
 	background-size: cover;
 }
+ 
 @keyframes getIn {
 	0% {
 		opacity: 0;

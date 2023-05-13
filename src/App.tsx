@@ -183,10 +183,11 @@ function App(): JSX.Element {
 							const found = newDeviceToggles[i];
 							if (found) {
 								// Create a new copy of the found object with the updated property
+								console.log( found.lastChanged)
 								const newFound = {
 									...found,
 									hasLock: false,
-
+									lastChanged: hasAnyError ? found.lastChanged : data.lastChanged,
 									// If there was an error, keep the old value.
 									toggleValue: hasAnyError ? found.toggleValue : data.toggleValue ? true : false,
 								};
