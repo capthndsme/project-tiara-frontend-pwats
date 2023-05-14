@@ -17,6 +17,9 @@ export function More() {
 					<Link to="/more/pics" className="appLink">
 						Photo Gallery
 					</Link>
+					<Link to="/more/chat" className="appLink">
+						Device chat
+					</Link>
 					<Link to="/more/share" className="appLink">
 						Share this device
 					</Link>

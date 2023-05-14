@@ -54,6 +54,7 @@ export function Images() {
 		>
 			<TopBar
 				float={true}
+				hideArc={true}
 				style={{
 					transition: "transform 0.2s ease-in-out",
 					transform: uiShow ? "translateY(0px)" : "translateY(-60px)",

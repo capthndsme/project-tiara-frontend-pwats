@@ -5,8 +5,15 @@ export type AppStateType = {
    accountId: number,
    devices: Array<Device> | null,
    connected: boolean
-  
- }
+   accountDetails?: AccountDetails
+}
+export type AccountDetails = {
+   AccountID: number,
+   Email: string,
+   DisplayName: string,
+   DisplayImage: string
+   Username: string
+}
 export const DefaultAppState: AppStateType = {
    authenticated: false,
    accountId: 0,

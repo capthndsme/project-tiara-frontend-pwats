@@ -38,6 +38,25 @@ button {
 	position: relative;
 	overflow: hidden;
 }
+.arc-top-l{
+  position:absolute;
+  background:var(--bg-colour);
+  width:36px;
+  height:36px;
+  border-radius:50%;
+ 
+   bottom:-18px;
+  left:0px;
+}
+.arc-top-r {
+	position: absolute;
+	background: var(--bg-colour);
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	bottom: -18px;
+	right: 0px;
+}
 .refreshButton:disable, input[type="submit"]:disable {
 	opacity: 0.5;
 }
@@ -766,6 +785,9 @@ p {
 	bottom: 0px;
 	padding: 16px 32px;
 }
+.ARCRIGHT{
+	display: none !important;
+}
 .navLinks {
 	width: 100%;
 	display: flex;
@@ -782,6 +804,7 @@ p {
 	padding-left: 16px;
 	line-height: 25px;
 }
+ 
 #TopBar {
 	position: sticky;
 	top: 0px;
@@ -845,6 +868,9 @@ Breakpoint for mobile devices
 		display: flex;
 		align-items: center;
 	}
+	.ARCRIGHT{
+		display: block !important
+	}
 	.screen {
 		padding-left: 64px;
 	}
@@ -856,6 +882,7 @@ Breakpoint for mobile devices
 		flex-direction: column;
 		justify-content: space-around;
 	}
+
 	.navLinks {
 		width: 64px;
 		padding: 0px;
@@ -905,6 +932,9 @@ Breakpoint for mobile devices
 		height: unset;
 		padding: 8px 0px;
 	}
+	.ARCRIGHT{
+		display: block !important
+	}
 	#InnerNavBar {
 		width: 100%;
 		max-width: 400px;
@@ -935,7 +965,36 @@ Breakpoint for mobile devices
 		text-align: center;
 	}
 }
-
+.inline > div{
+	display: inline-block;
+}
+.msgBox {
+	margin-top: 8px;
+	display: flex;
+	padding-left: 16px;
+}
+.msgBox .left {
+	height: 48px;
+	width: 48px;
+}
+.msgBox .right {
+	flex: 1;
+	width: calc(100% - 48px);
+	min-height: 32px;
+	padding-left: 8px;
+}
+.pfp {
+	margin-left: 8px;
+	margin-top: 8px;
+	border-radius: 50%;
+	width: 32px;
+	height: 32px;
+}
+.time {
+	font-size: 14px;
+	margin-left: 8px;
+	opacity: 0.6;
+}
 @media (prefers-reduced-motion) {
 	/* styles to apply if the user's settings are set to reduced motion */
 	* {

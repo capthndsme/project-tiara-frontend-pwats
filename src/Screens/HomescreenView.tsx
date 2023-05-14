@@ -29,7 +29,7 @@ export function HomescreenView() {
 				<div className="maxWidth" style={{ maxWidth: 600 , textAlign:"center"}}>
 					<h1>You do not own or have access to any devices.</h1>
 					<br />
-					<a target="_blank" style={{color: "var(--highlight-colour)"}} rel="noreferrer" href="https://github.com/capthndsme/project-tiara-device-client-v2">
+					<a target="_blank" style={{color: "var(--highlight-colour)"}} rel="noreferrer noopener" href="https://github.com/capthndsme/project-tiara-device-client-v2">
 						Learn how to make your own device here.
 					</a>
 				</div>

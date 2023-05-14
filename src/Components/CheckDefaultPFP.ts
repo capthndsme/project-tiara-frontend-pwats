@@ -10,7 +10,7 @@ export function CheckDefaultPFP(val: string | undefined) {
       // Yes, this is client-sided.
       // Who wants to "hack" a profile picture anyways.
       const defaultPfp = defaultPfps[pfpSelector];
-      console.log(`Using default profile picture: ${defaultPfp}`)
+ 
       return defaultPfp;
    } else {
       return val;

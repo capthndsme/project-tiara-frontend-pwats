@@ -43,7 +43,8 @@ function App(): JSX.Element {
 				console.log("[WebSockets] Authentication took " + (Date.now() - emitStart) + "ms");
 				if (data.success) {
 					toast("Connected to the server.", { icon: "🌐" });
-					setAppState((appState) => ({ ...appState, authenticated: true, accountId: data.accountId, connected: true }));
+					console.log(data);
+					setAppState((appState) => ({ ...appState, authenticated: true, accountId: data.accountId, accountDetails: data.accountDetails, connected: true }));
 					socket.timeout(6000).emit("requestDeviceList", { accountId: data.accountId }, (err: Boolean, requestData: ReqDevices) => {
 						if (err) {
 							toast.error("Failed to get device list.");
