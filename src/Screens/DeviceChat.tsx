@@ -15,11 +15,22 @@ export function DeviceChat() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [oldestMessage, setOldestMessage] = useState(0); // For pagination
 	function insertMessage(message: Message) {
-		setMessages([...messages, message]);
+		setMessages((messages) => [...messages, message]);
+		requestAnimationFrame(() => {
+			document.documentElement.scrollTo({
+				top: document.documentElement.scrollHeight + 1000, // just to make sure
+				behavior: "smooth",
+			});
+		});
 	}
 	useEffect(() => {
+		function newMessageReceiver(data: Message) {
+			insertMessage(data);
+		}
+		socket.on("MessagingReceive", newMessageReceiver);
 		socket.emit("MessagingGet", { limit: 250 }, (data: GenericCallbackResultWithData<Array<Message>>) => {
 			setMessages(data.data);
+			setOldestMessage(data.data[0].messageID);
 			console.log(data);
 			// Our root scroll element is the documentElement
 			document.documentElement.scrollTo({
@@ -27,6 +38,9 @@ export function DeviceChat() {
 				behavior: "smooth",
 			});
 		});
+		return () => {
+			socket.off("MessagingReceive", newMessageReceiver);
+		};
 	}, []);
 	return (
 		<div
@@ -72,7 +86,7 @@ export function DeviceChat() {
 					return (
 						<div key={message.messageID} className="msgBox">
 							<div className="left">
-								<img className="pfp" src={CheckDefaultPFP(message.DisplayImage)} />
+								<img className="pfp" src={CheckDefaultPFP(message.DisplayImage)} alt="User's PFP" />
 							</div>
 							<div className="right">
 								<div className="inline">

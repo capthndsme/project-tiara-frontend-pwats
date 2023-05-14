@@ -5,6 +5,7 @@ import { socket } from "../Components/socket";
 import { GenericCallbackResultWithData } from "../Types/GenericCallbackResultWithData";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+ 
 
 export function Share() {
 	const [loaded, setLoaded] = useState(false);
@@ -37,9 +38,9 @@ export function Share() {
 					<a className="appLink" target="_blank" rel="noreferrer noopener" href={"/share/" + hash}>   
 						Share code
 					</a>
-					<a className="appLink" >
+					<Link className="appLink" to="/more/share/revoke" >
 						Revoke invite link
-					</a>
+					</Link>
 				</div>
 				<div style={{padding:8, textAlign:"justify"}}>
 					Going to this screen automatically generates a new share code. Avoid going to this screen unless you want to invite someone.

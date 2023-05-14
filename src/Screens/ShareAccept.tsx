@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { TopBar } from "../Components/TopBar";
-import { SimpleBackButton } from "../Components/SimpleBackButton";
+import { useParams } from "react-router-dom";
+ 
 import { Spin } from "../Components/Spin";
 import { socket } from "../Components/socket";
 import { GenericCallbackResultWithData } from "../Types/GenericCallbackResultWithData";
