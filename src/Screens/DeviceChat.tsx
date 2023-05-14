@@ -38,9 +38,11 @@ export function DeviceChat() {
 				behavior: "smooth",
 			});
 		});
+      console.log("Re-render triggered at DeviceChat.tsx")
 		return () => {
 			socket.off("MessagingReceive", newMessageReceiver);
 		};
+     
 	}, []);
 	return (
 		<div
