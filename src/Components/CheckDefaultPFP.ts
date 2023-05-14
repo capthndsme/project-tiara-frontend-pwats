@@ -10,7 +10,7 @@ export function CheckDefaultPFP(val: string | undefined, username: string) {
 		}
 		total = total;
 		// Return the remainder of dividing the total by 5
-		console.log(total);
+	 
 		const pfpSelector = total % 5;
 		const defaultPfps = ["/default_pfp/1.jpg", "/default_pfp/2.jpg", "/default_pfp/3.jpg", "/default_pfp/4.jpg"];
 		// Yes, this is client-sided.
