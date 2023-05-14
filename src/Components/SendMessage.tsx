@@ -19,7 +19,7 @@ export function SendMessage({ insertMessage }: { insertMessage: (message: Messag
          timestamp: new Date().getTime(),
          DeviceHWID: "",
          Username: localStorage.getItem("username") || "",
-         DisplayImage: CheckDefaultPFP(appContext.accountDetails?.DisplayImage) || ""
+         DisplayImage: CheckDefaultPFP(appContext.accountDetails?.DisplayImage, localStorage.getItem("username") || "") || ""
 
       };
       socket.emit("MessagingSend", { message: message}, (data: GenericCallbackResultWithData<boolean>) => {

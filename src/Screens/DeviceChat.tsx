@@ -88,7 +88,7 @@ export function DeviceChat() {
 					return (
 						<div key={message.messageID} className="msgBox">
 							<div className="left">
-								<img className="pfp" src={CheckDefaultPFP(message.DisplayImage)} alt="User's PFP" />
+								<img className="pfp" src={CheckDefaultPFP(message.DisplayImage, message.Username)} alt="User's PFP" />
 							</div>
 							<div className="right">
 								<div className="inline">

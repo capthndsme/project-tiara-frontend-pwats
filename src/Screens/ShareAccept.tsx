@@ -59,7 +59,7 @@ export function ShareAccept() {
                      marginTop: 16
                   }}
                   alt="Profile of the person who sent you the invite."
-                  src={CheckDefaultPFP(inviteDetails?.DisplayImage)}></img>
+                  src={CheckDefaultPFP(inviteDetails?.DisplayImage, inviteDetails?.Username||"")}></img>
                   @{inviteDetails?.Username} invited you to join<br/>
                   <h2 style={{marginBottom:0}}>
                      {inviteDetails?.DeviceName}
