@@ -23,44 +23,66 @@ button {
 .swal2-container {
 	color: var(--light-colour);
 	backdrop-filter: blur(var(--blur-filter));
-	
 }
 .swal2-popup {
 	border-radius: 16px !important;
 }
-.swal2-title{
+.swal2-title {
 	font-family: "Lexend", sans-serif;
 }
-[class^=swal2]{
+[class^="swal2"] {
 	color: var(--light-colour) !important;
 }
 .cameraImage {
 	position: relative;
 	overflow: hidden;
 }
-.arc-top-l{
-  position:absolute;
-  background:var(--bg-colour);
-  width:36px;
-  height:36px;
-  border-radius:50%;
- 
-   bottom:-18px;
-  left:0px;
+/* Fix Chrome's background-attachment: fixed bug */
+@keyframes bgFix {
+	0% {
+		transform: scale(0.9);
+		opacity: 0;
+	}
+	90% {
+		transform: scale(0.9);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+.arc-top-l {
+	position: absolute;
+
+	background: var(--bg-colour);
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+
+	bottom: -18px;
+	left: 0px;
 }
 .arc-top-r {
 	position: absolute;
 	background: var(--bg-colour);
+ 
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
 	bottom: -18px;
 	right: 0px;
 }
-.refreshButton:disable, input[type="submit"]:disable {
+.ARC, .ARCRIGHT {
+	animation: bgFix 250ms ease-in-out;
+	animation-delay: 16ms;
+}
+.refreshButton:disable,
+input[type="submit"]:disable {
 	opacity: 0.5;
 }
-.refreshButton:disabled, input[type="submit"]:disabled {
+.refreshButton:disabled,
+input[type="submit"]:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
 }
@@ -163,8 +185,7 @@ button {
 
 	animation: showBox 250ms ease-in-out;
 }
-.refreshButton
- {
+.refreshButton {
 	background: var(--highlight-colour);
 	border: none;
 	border-radius: 6px;
@@ -188,7 +209,7 @@ button {
 }
 .signupForm > input {
 	width: 100%;
- 
+
 	display: block;
 	margin: 8px 0px;
 	border: none;
@@ -201,7 +222,6 @@ button {
 	margin-top: 16px;
 }
 
- 
 .deviceControls > * {
 	aspect-ratio: 1;
 	box-shadow: rgba(24, 24, 24, 0.3) 0px 3px 10px;
@@ -215,12 +235,15 @@ button {
 	font-size: 24px;
 	padding: 12px 16px;
 	font-weight: 300;
+	font-family: "Lexend", sans-serif;
 	background: var(--bg2-colour);
 	user-select: none;
 	transition: transform 150ms ease-in-out, background 150ms ease-in-out, font-size 150ms ease-in-out, padding 150ms ease-in-out,
 		border-radius 150ms ease-in-out;
 }
-
+.toggleSmall {
+	font-family: Inter, sans-serif;
+}
 .deviceControls > *:active {
 	transform: scale(0.9);
 	font-size: 20px;
@@ -472,11 +495,10 @@ body {
 
 body,
 .App,
-.screen  {
+.screen {
 	width: 100%;
- 
 }
-.fullscreen  {
+.fullscreen {
 	width: 100%;
 	height: 100%;
 	min-height: 100vh;
@@ -493,7 +515,7 @@ body,
 	}
 }
 * {
-	transition: background 350ms ease-in-out, background-color 350ms ease-in-out;
+	transition: background 350ms ease-in-out, background-color 350ms ease-in-out, color 250ms ease-in-out;
 }
 .screen {
 	padding-left: 300px;
@@ -563,7 +585,7 @@ body,
 .genericSecondLine {
 	font-size: 14px;
 	display: inline-block;
-	padding: 0px 12px 0px 12px;
+	opacity: 0.8;
 	margin-top: 4px;
 }
 .alertBody,
@@ -653,7 +675,7 @@ body,
 }
 .gridMode {
 	position: fixed;
-	 
+
 	padding-top: 60px;
 	bottom: unset;
 	display: grid;
@@ -669,8 +691,9 @@ body,
 	width: 100%;
 	height: 100%;
 }
-.helpAnimate{ 
-	transition:transform 0.2s ease-in-out, width 350ms ease-in-out, height 350ms ease-in-out, opacity 350ms ease-in-out, left 350ms ease-in-out, bottom 350ms ease-in-out, top 350ms ease-in-out;
+.helpAnimate {
+	transition: transform 0.2s ease-in-out, width 350ms ease-in-out, height 350ms ease-in-out, opacity 350ms ease-in-out,
+		left 350ms ease-in-out, bottom 350ms ease-in-out, top 350ms ease-in-out;
 }
 .gridMode > .filmstripImage {
 	display: block;
@@ -689,7 +712,6 @@ body,
 }
 .gridMode img {
 	transform: none !important;
-
 }
 .filmstripContainer {
 	position: fixed;
@@ -715,8 +737,8 @@ body,
 	display: none;
 }
 .filmstripImage > img {
-	width: 100%;
-	height: 100%;
+	width: 80px;
+	height: 80px;
 	aspect-ratio: 1/1;
 	user-select: none;
 	pointer-events: none;
@@ -728,11 +750,11 @@ body,
 .activeBorder {
 	border: var(--highlight-colour) solid 4px;
 }
-  svg {
-	color: var(--light-colour)  
+svg {
+	color: var(--light-colour);
 }
-  .activeLink svg {
-	color: var(--highlight-colour)  
+.activeLink svg {
+	color: var(--highlight-colour);
 }
 .LeftSplit {
 	width: 50%;
@@ -785,7 +807,7 @@ p {
 	bottom: 0px;
 	padding: 16px 32px;
 }
-.ARCRIGHT{
+.ARCRIGHT {
 	display: none !important;
 }
 .navLinks {
@@ -804,7 +826,7 @@ p {
 	padding-left: 16px;
 	line-height: 25px;
 }
- 
+
 #TopBar {
 	position: sticky;
 	top: 0px;
@@ -868,8 +890,8 @@ Breakpoint for mobile devices
 		display: flex;
 		align-items: center;
 	}
-	.ARCRIGHT{
-		display: block !important
+	.ARCRIGHT {
+		display: block !important;
 	}
 	.screen {
 		padding-left: 64px;
@@ -932,8 +954,8 @@ Breakpoint for mobile devices
 		height: unset;
 		padding: 8px 0px;
 	}
-	.ARCRIGHT{
-		display: block !important
+	.ARCRIGHT {
+		display: block !important;
 	}
 	#InnerNavBar {
 		width: 100%;
@@ -965,7 +987,7 @@ Breakpoint for mobile devices
 		text-align: center;
 	}
 }
-.inline > div{
+.inline > div {
 	display: inline-block;
 }
 .msgBox {
@@ -1025,17 +1047,17 @@ Breakpoint for mobile devices
 	text-align: center;
 }
 .activeLink {
-	color: var(--highlight-colour)  
+	color: var(--highlight-colour);
 }
 
 .toggleList {
 	width: 100%;
 }
-.appLink{
+.appLink {
 	cursor: pointer;
-
 }
-.appLink:hover, .optionOnly:hover {
+.appLink:hover,
+.optionOnly:hover {
 	background: var(--darker-bg-colour);
 }
 .toggleContainer {

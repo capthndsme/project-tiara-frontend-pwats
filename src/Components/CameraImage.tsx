@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { socket } from "./socket";
 
 export function CameraImage({hwid}: {hwid: string|undefined}) {
-   const [update, setUpdate] = useState(0);
+   const [update, setUpdate] = useState(Date.now());
    useEffect(() => {
       function updateImageReceiver() {
          console.log("[CameraImage] Received update.")
