@@ -5,9 +5,12 @@ import moment from "moment";
 import { useContext } from "react";
 
 import { ActiveDeviceContext } from "../Components/ActiveDeviceContext";
+import { AppContext } from "../Components/AppContext";
+import { CheckDefaultPFP } from "../Components/CheckDefaultPFP";
 export function More() {
 	const gitInfo = GitInfo();
 	const activeDeviceContext = useContext(ActiveDeviceContext);
+	const appContext = useContext(AppContext);
 	return (
 		<div className="screen">
 			<TopBar> More </TopBar>
@@ -30,7 +33,12 @@ export function More() {
 
 				<div style={{ padding: "8px 12px", marginTop: "16px" }}>Profile</div>
 				<div className="genericEntry noMargin">
-					<div className="optionOnly">@{localStorage.getItem("username")}</div>
+					<div className="optionOnly" style={{
+						display: "flex",
+					}}>
+						<img alt="Profile" style={{width:64, height: 64, borderRadius:50,marginRight: 16}} src={CheckDefaultPFP(appContext.accountDetails?.DisplayImage, appContext.accountDetails?.Username || "")}></img>
+						<div><h2 className="noMargin" style={{marginBottom:4}}>{appContext.accountDetails?.DisplayName}</h2>@{appContext.accountDetails?.Username}</div>
+					</div>
 
 					<Link to="/more/account" className="appLink">
 						Edit account details
@@ -64,11 +72,19 @@ export function More() {
 						}}
 						className="optionOnly"
 					>
-						<a target="_blank" rel="noreferrer noopener" style={{color:"var(--highlight-colour)"}} href={"https://github.com/capthndsme/project-tiara-frontend-pwats/commit/" + gitInfo.commit.hash}>project-tiara-frontend@{gitInfo.commit.shortHash}</a><br />
+						<a
+							target="_blank"
+							rel="noreferrer noopener"
+							style={{ color: "var(--highlight-colour)" }}
+							href={"https://github.com/capthndsme/project-tiara-frontend-pwats/commit/" + gitInfo.commit.hash}
+						>
+							project-tiara-frontend@{gitInfo.commit.shortHash}
+						</a>
+						<br />
 						built at {moment(gitInfo.commit.date).format("YYYY-MM-DD HH:mm")}
 					</div>
 				</div>
-			</div> 
+			</div>
 		</div>
 	);
 }

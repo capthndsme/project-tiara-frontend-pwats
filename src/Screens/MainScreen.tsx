@@ -16,6 +16,7 @@ import { Images } from "./Images";
 import { Share } from "./Share";
 import { ShareAccept } from "./ShareAccept";
 import { DeviceChat } from "./DeviceChat";
+import { Account } from "./Account";
 
 export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 	if (connectedOnce) {
@@ -30,6 +31,7 @@ export function MainScreen({connectedOnce}:{connectedOnce:boolean}) {
 					<Route path="/camera" element={<VideoCameraView />} />
 					<Route path="/stats" element={<StatsScreen/>} />
 					<Route path="/more/pics" element={<Images />} />
+					<Route path="/more/account" element={<Account />} />
 					<Route path="/more/chat" element={<DeviceChat />} />
 					<Route path="/more/logout" element={<Logout />} />
 					<Route path="/more/sessions" element={<SessionsScreen />} />
