@@ -8,7 +8,7 @@ export function CheckDefaultPFP(val: string | undefined, username: string) {
 			// Add the ASCII code of the character to the total
 			total += char.codePointAt(0) || char.charCodeAt(0);
 		}
-		total = total;
+ 
 		// Return the remainder of dividing the total by 5
 	 
 		const pfpSelector = total % 5;

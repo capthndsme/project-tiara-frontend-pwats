@@ -13,6 +13,8 @@ import moment from "moment";
 export function DeviceChat() {
 	const adc = useContext(ActiveDeviceContext);
 	const [messages, setMessages] = useState<Message[]>([]);
+	// Pagination is coming soon.
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [oldestMessage, setOldestMessage] = useState(0); // For pagination
 	function insertMessage(message: Message) {
 		setMessages((messages) => [...messages, message]);
