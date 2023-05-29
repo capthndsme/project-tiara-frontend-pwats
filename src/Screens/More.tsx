@@ -29,6 +29,16 @@ export function More() {
 					<Link to="/more/share" className="appLink">
 						Edit device details
 					</Link>
+					<button className="appLink" style={{
+						 
+						border: "none",
+						textAlign: "left",
+						fontSize: "1rem",
+						fontWeight: "inherit",
+
+						}}>
+						Reboot device
+					</button>
 				</div>
 
 				<div style={{ padding: "8px 12px", marginTop: "16px" }}>Profile</div>
