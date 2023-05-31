@@ -550,7 +550,17 @@ body,
 .genericNormalMargins {
 	margin: 0px;
 }
-
+@keyframes shakeLogin {
+	0% { transform: translateX(0)}
+	25% { transform: translateX(15px);}
+	50% { transform: translateX(-15px) }
+	75% { transform: translateX(15px) }
+	100% { transform: translateX(0); }
+ }
+ .ReShake {
+	animation: shakeLogin 250ms ease-in-out;
+	animation-iteration-count: 2;
+ }
 .appLink {
 	display: block;
 	width: 100%;
@@ -574,6 +584,10 @@ body,
 /*  Make me a caret on the right side.*/
 .appLink::after {
 	content: "›";
+	float: right;
+ 
+}
+.rightSide {
 	float: right;
 }
 .alertTitle,
@@ -1058,8 +1072,11 @@ Breakpoint for mobile devices
 .appLink {
 	cursor: pointer;
 }
+.withPointer {
+	cursor: pointer;
+}
 .appLink:hover,
-.optionOnly:hover {
+.optionOnly:hover  {
 	background: var(--darker-bg-colour);
 }
 .toggleContainer {
@@ -1177,3 +1194,15 @@ input:checked + .slider:before {
 	padding: 0px 8px
 }
  
+.swal2-container.swal2-center > .swal2-popup {
+	background-color: var(--darker-bg-colour-translucent) !important;
+	border-radius: 24px !important;
+}
+.swal2-styled.swal2-confirm {
+	background-color: var(--highlight-colour) !important; /* !important overrides */
+	color: var(--darker-bg-colour) !important;
+}
+.swal2-styled.swal2-cancel {
+	background-color: var(--bg-colour) !important; /* !important overrides */
+	color: var(--highlight-colour) !important;
+}

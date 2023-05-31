@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { DeviceControls } from "../Components/DeviceControls";
 import { DeviceGlance } from "../Components/DeviceGlance";
 import { DeviceSelector } from "../Components/DeviceSelector";
@@ -12,6 +12,7 @@ export function HomescreenView() {
 			<div className="screen">
 				<Helmet>
 					<meta name="theme-color" content="#3a3539" />
+					<title> Home - Project Tiara</title>
 				</Helmet>
 				<div className="maxWidth" style={{ maxWidth: 600 }}>
 					<DeviceSelector />
@@ -25,6 +26,7 @@ export function HomescreenView() {
 			<div className="screen">
 				<Helmet>
 					<meta name="theme-color" content="#3a3539" />
+					<title> Project Tiara - Home</title>
 				</Helmet>
 				<div className="maxWidth" style={{ maxWidth: 600 , textAlign:"center"}}>
 					<h1>You do not own or have access to any devices.</h1>

@@ -1,5 +1,6 @@
 import "@fontsource/lexend/200.css";
 import { SimpleBackButton } from "../Components/SimpleBackButton";
+import { Helmet } from "react-helmet-async";
 
 export function About() {
 	const paragraph: React.CSSProperties = { marginTop: 16, textAlign: "justify", lineHeight:"1.75em" };
@@ -12,6 +13,10 @@ export function About() {
 				zIndex: 20
 			}}
 		>
+			<Helmet>
+				<title> About - Project Tiara </title>
+
+			</Helmet>
 			<div className="maxWidth">
 				<div
 					style={{
@@ -39,7 +44,7 @@ export function About() {
 				<p style={paragraph}>
 					This web app allows you to manage your doghouse remotely, check the status of the doghouse, and more.
 				</p>
-				<h2 className="noMargin" style={{ fontFamily: "lexend", fontSize: 24, marginTop: 32 }}>
+				{/* <h2 className="noMargin" style={{ fontFamily: "lexend", fontSize: 24, marginTop: 32 }}>
 					Pets of the researchers
 				</h2>
 				<p style={paragraph}>
@@ -52,7 +57,7 @@ export function About() {
 					<li>Tiara - the project's namesake.</li>
 					<li>Chewy</li>
 					<li>Maui - a cat, but since it is my GitHub PFP, I am including him</li>
-				</ul>
+				</ul> */}
 				<h2 className="noMargin" style={{ fontFamily: "lexend", fontSize: 24, marginTop: 32 }}>
 					Source code
 				</h2>

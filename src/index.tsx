@@ -12,6 +12,32 @@ import { Signup } from "./Screens/Signup";
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<React.StrictMode>
+		{
+			(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? (
+				// Dev server, show warning that things may break.
+				<div 
+				style={{
+					position: "fixed",
+					top: "0",
+					left: "0",
+					width: "100%",
+					
+					zIndex: 999,
+					background: "var(--darker-bg-colour-translucent)",
+					backdropFilter: "blur(10px)",
+					WebkitBackdropFilter: "blur(10px)",
+					color: "var(--light-colour)",
+					textAlign: "center",
+					padding: "4px",
+					pointerEvents: "none"
+
+				}}
+				>
+					Development mode - bugs may occur.
+				</div>
+			):null
+		
+		}
 		<div className="App">
 			<BrowserRouter>
 				<Routes>

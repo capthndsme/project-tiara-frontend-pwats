@@ -10,7 +10,7 @@ import { socket } from "../../Components/socket";
 import { DeviceReqStatus } from "../../Types/DeviceReqStatus";
 import { useParams } from "react-router-dom";
 
-export function EditTrigger({ triggers }: { triggers: Array<ScheduledTask> }) {
+export function EditTrigger({ triggers, reload}: { triggers: Array<ScheduledTask> , reload: () => void}) {
 	const adc = useContext(ActiveDeviceContext);
 	const { id } = useParams();
 	const [activeKey, setActiveKey] = useState(-1);

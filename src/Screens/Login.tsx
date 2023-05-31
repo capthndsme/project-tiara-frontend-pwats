@@ -8,8 +8,9 @@ import toast from "react-hot-toast";
 import { FunctionContext } from "../Components/FunctionContext";
 import { WSLogin } from "../Types/WS/Login";
 import "@fontsource/lexend/200.css";
+import { Helmet } from "react-helmet-async";
 
-export function Login() {
+export function Login({showLoginFirst}:{showLoginFirst?:boolean}) {
 	const [loading, setLoading] = useState(false);
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
@@ -17,6 +18,15 @@ export function Login() {
 	const spanRef = useRef<HTMLDivElement>(null);
 	const appContext = useContext(AppContext);
 	const functionContext = useContext(FunctionContext);
+	function errorShaker() {
+		spanRef.current?.classList.remove("ReShake");
+		setTimeout(() => {
+			 spanRef.current?.classList.add("ReShake");
+			 setTimeout(() => {
+				  spanRef.current?.classList.remove("ReShake");
+			 }, 500)
+		}, 16);
+	}
 	function handleSubmission() {
 		if (loading) return;
 
@@ -28,11 +38,13 @@ export function Login() {
 		const password = passwordRef.current.value;
 		if (username.length < 3 || password.length < 3) {
 			toast.error("Username or password is too short.");
+			errorShaker();
 			return;
 		}
 		setLoading(true);
 		if (!socket.connected) {
 			socket.connect();
+
 		}
 		socket.timeout(5000).emit(
 			"login",
@@ -54,10 +66,20 @@ export function Login() {
 							connected: true,
 						}));
 					if (functionContext.authenticate) functionContext.authenticate();
-					navigate("/");
+					// Check for "redirect" in the LocalStorage. If it exists, redirect to that page.
+					const redirect = localStorage.getItem("redirect");
+					if (redirect) {
+						console.log("Redirector: We have a redirect: " + redirect)
+						localStorage.removeItem("redirect");
+						navigate(redirect);
+					} else {
+						navigate("/");
+					}
+					
 					// This is a user interface issue. The user should be redirected to the main screen.
 				} else {
 					toast.error("Failed to log in. Check your username and password.");
+					errorShaker();
 				}
 			}
 		);
@@ -72,6 +94,8 @@ export function Login() {
 			console.log("Already logged in.");
 			navigate("/");
 		}
+ 
+		
 		let socketKeepalive = setInterval(() => {
 			// Signifies that the user is still in this screen.
 			if (!socket.connected) socket.connect();
@@ -112,6 +136,9 @@ export function Login() {
 	}, [navigate, appContext.authenticated]);
 	return (
 		<div id="LoggedOutScreen" className="loading fullscreen">
+			<Helmet>
+				<title>Project Tiara - Login</title>
+			</Helmet>
 			<div className="maxWidthSmaller">
 				<div className="LoginInfo">
 					<h1 className="noMargin" style={{ fontFamily: "lexend", fontSize: 40 }}>
@@ -121,7 +148,8 @@ export function Login() {
 				</div>
 
 				<div ref={spanRef} className="spanBox">
-					<center className="mediumTextHeight">Sign-in required.</center>
+					<center className="mediumTextHeight">{showLoginFirst?"You must be logged in to proceed."
+					:"Sign-in required."}</center>
 					Username
 					<br />
 					<input

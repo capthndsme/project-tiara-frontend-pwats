@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import { socket } from "../../Components/socket";
 import { DeviceReqStatus } from "../../Types/DeviceReqStatus";
 
-export function AddTriggers() {
+export function AddTriggers({reload}:{reload:() => void}) {
 	const adc = useContext(ActiveDeviceContext);
 	const [activeKey, setActiveKey] = useState(-1);
 	const [saving, setSaving] = useState(false);

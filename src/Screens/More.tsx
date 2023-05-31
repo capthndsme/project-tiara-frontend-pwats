@@ -2,17 +2,30 @@ import { Link } from "react-router-dom";
 import { TopBar } from "../Components/TopBar";
 import GitInfo from "react-git-info/macro";
 import moment from "moment";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { ActiveDeviceContext } from "../Components/ActiveDeviceContext";
 import { AppContext } from "../Components/AppContext";
 import { CheckDefaultPFP } from "../Components/CheckDefaultPFP";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { socket } from "../Components/socket";
+import { Helmet } from "react-helmet-async";
+ 
+
+const MySwal = withReactContent(Swal);
 export function More() {
 	const gitInfo = GitInfo();
 	const activeDeviceContext = useContext(ActiveDeviceContext);
 	const appContext = useContext(AppContext);
+	useEffect(() => {
+		return MySwal.close
+	}, [])
 	return (
 		<div className="screen">
+			<Helmet>
+				<title>More - Project Tiara</title>
+			</Helmet>
 			<TopBar> More </TopBar>
 			<div className="maxWidth">
 				<div style={{ padding: "0px 12px 8px" }}>{activeDeviceContext.deviceDetails?.DeviceName}</div>
@@ -29,7 +42,23 @@ export function More() {
 					<Link to="/more/share" className="appLink">
 						Edit device details
 					</Link>
-					<button className="appLink" style={{
+					<button className="appLink"
+					onClick={() => {
+						MySwal.fire({
+							title: "Reload device?",
+							text: "This will reload the device connector. It will take a few seconds.",
+							icon: "warning",
+
+							showCancelButton: true,
+							confirmButtonText: "Reload"
+						})
+						.then((result) => {
+							if (result.isConfirmed) {
+								socket.emit("RebootSubscribedDevice");
+							}
+						});
+					}}
+					style={{
 						 
 						border: "none",
 						textAlign: "left",
@@ -37,8 +66,38 @@ export function More() {
 						fontWeight: "inherit",
 
 						}}>
-						Reboot device
+						Reload device<br/>
+						Reloading your device will restart its connector. It will not affect your data.
 					</button>
+
+					<button className="appLink"
+					onClick={() => {
+						MySwal.fire({
+							title: "Reboot device?",
+							text: "This will reboot the device. It will take a few minutes.",
+							icon: "warning",
+
+							showCancelButton: true,
+							confirmButtonText: "Reboot"
+						})
+						.then((result) => {
+							if (result.isConfirmed) {
+								socket.emit("RebootSubscribedDevice", {hard: true});
+							}
+						});
+					}}
+					style={{
+						 
+						border: "none",
+						textAlign: "left",
+						fontSize: "1rem",
+						fontWeight: "inherit",
+
+						}}>
+						Reboot device<br/>
+						Rebooting your device can help resolve issues. It will not affect your data.
+					</button>
+					 	
 				</div>
 
 				<div style={{ padding: "8px 12px", marginTop: "16px" }}>Profile</div>
@@ -66,9 +125,7 @@ export function More() {
 					<Link to="/more/themes" className="appLink">
 						App Theme
 					</Link>
-					<Link to="/more/themes" className="appLink">
-						Customise background
-					</Link>
+				 
 				</div>
 
 				<div style={{ padding: "8px 12px", marginTop: "16px" }}>About</div>

@@ -3,7 +3,7 @@ import { ActiveDeviceContext } from "./ActiveDeviceContext";
 import { DeviceToggle } from "./DeviceToggle";
   
 
-import Delayed from "./Delayed";
+ 
 import { CameraImage } from "./CameraImage";
 
 export function DeviceControls() {
@@ -13,14 +13,14 @@ export function DeviceControls() {
 	if (localDevice.deviceToggles) {
 		for (let i = 0; i < localDevice.deviceToggles.length; i++) {
 			controls.push(
-			<Delayed delay={125 + (i*20)}> <DeviceToggle key={i} toggle={localDevice.deviceToggles[i]} /> </Delayed>);
+		 <DeviceToggle key={i} toggle={localDevice.deviceToggles[i]} />  );
 		}
 	}
 	return (
 		<div className="deviceControls">
-			<Delayed delay={125}>
+ 
 				<CameraImage hwid={localDevice.deviceDetails?.DeviceHWID} />
-			</Delayed>
+ 
 
 			{controls}
 		</div>

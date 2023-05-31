@@ -1,15 +1,27 @@
 import { Link } from "react-router-dom";
 import { ScheduledTask } from "../../Types/SchedulerTypes";
 import { TopBar } from "../../Components/TopBar";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaTrash } from "react-icons/fa";
 import Delayed from "../../Components/Delayed";
 import { SchedulerTimeToTime } from "../../Components/SchedulerTimeToTime";
+import { useEffect, useRef } from "react";
+import { socket } from "../../Components/socket";
+import { toast } from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
-export function TriggerScreen({ triggers }: { triggers: Array<ScheduledTask> }) {
+export function TriggerScreen({ triggers, reload, setTriggers }: { triggers: Array<ScheduledTask>, reload: () => void, setTriggers: React.Dispatch<React.SetStateAction<ScheduledTask[]>>}) {
+	const reloadRef = useRef(reload);
+	useEffect(() => {
+		// RELOAD everytime we mount this component
+		reloadRef.current();
+	}, [reloadRef])
 	if (triggers.length === 0) {
 		return (
 			<>
 				<TopBar float={true}> Automation and Triggers </TopBar>
+				<Helmet>
+					<title> Triggers - Project Tiara</title>
+				</Helmet>
 				<div className="maxWidth">
 					You have empty triggers.
 					<Link to="/triggers/add" className="refreshButton">
@@ -45,6 +57,40 @@ export function TriggerScreen({ triggers }: { triggers: Array<ScheduledTask> }) 
 										}}
 									/>
 								</Link>
+					 
+								<div
+
+									onClick={(e) => {
+										// Okay, div on click is hacky, but it works.
+										 
+										socket.emit("RemoveTrigger", {
+											outputName: trigger.outputName,
+										}, () => {
+											reloadRef.current();
+											toast("Trigger deleted.")
+										});
+										// remove from our local state
+										setTriggers((prev) => {
+											return prev.filter((t) => t.outputName !== trigger.outputName);
+										});
+									}}
+									style={{
+										color: "#ee9988",
+										cursor: "pointer",
+										marginLeft: "8px",
+										padding: "0px",
+										textDecoration: "none",
+									}}
+								>
+									Delete
+									<FaTrash
+										style={{
+											color: "#ee9988",
+											marginLeft: "8px",
+											padding: "0px",
+										}}
+									/>
+								</div>
 							</div>
 						</div>
 						<div className="genericBody">

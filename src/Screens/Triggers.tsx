@@ -11,7 +11,10 @@ import { EditTrigger } from "./Subscreens/EditTrigger";
 export function Triggers() {
 	// Load triggers
 	const [triggers, setTriggers] = useState<Array<ScheduledTask>>([]);
-	
+	const [simpleForceUpdate, setSimpleForceUpdate] = useState<number>(0);
+	function incrementSimpleForceUpdate() {
+		setSimpleForceUpdate((prev) => prev + 1);
+	}
 	useEffect(() => {
 		if (socket.disconnected) {
 			// If the socket is disconnected, redirect to the main app page
@@ -41,14 +44,14 @@ export function Triggers() {
 			// It seems that we don't need to do anything here.
 			// for now? 
 		}
-	}, []);
+	}, [simpleForceUpdate]);
  
 	return(
 	<div className="screen">
 		<Routes>
-			<Route path="/" element={<TriggerScreen triggers={triggers} />} />
-			<Route path="/add" element={<AddTriggers/>} />
-			<Route path="/edit/:id" element={<EditTrigger triggers={triggers}/>} />
+			<Route path="/" element={<TriggerScreen setTriggers={setTriggers} reload={incrementSimpleForceUpdate} triggers={triggers} />} />
+			<Route path="/add" element={<AddTriggers reload={incrementSimpleForceUpdate} />} />
+			<Route path="/edit/:id" element={<EditTrigger reload={incrementSimpleForceUpdate}  triggers={triggers}/>} />
 		</Routes>
 		
 	</div>

@@ -9,6 +9,7 @@ import { TimestampAgo } from "../Components/TimestampAgo";
  
  
 import moment from "moment";
+import { Helmet } from "react-helmet-async";
 
 export function StatsScreen() {
 	const [data, setData] = useState<Array<Stats<ThermometerStat>>>([]);
@@ -55,11 +56,11 @@ export function StatsScreen() {
             if (!(saneInsideTemp === 0 || saneOutsideTemp === 0 || saneInsideHumidity === 0 || saneOutsideHumidity === 0)) {
                chartData.push({
                   label:  moment(data[i].Timestamp).format("DD/MM HH:mm"),
-                  InsideTemp: saneInsideTemp.toFixed(2),
-                  InsideHumidity: saneInsideHumidity.toFixed(2),
-                  OutsideTemp: saneOutsideTemp.toFixed(2),
-                  OutsideHumidity: saneOutsideHumidity.toFixed(2),
-                  SystemTemp: temp.cpu?.temperature?temp.cpu.temperature.toFixed(2):0,
+                  InsideTemp: saneInsideTemp,
+                  InsideHumidity: saneInsideHumidity,
+                  OutsideTemp: saneOutsideTemp,
+                  OutsideHumidity: saneOutsideHumidity,
+                  SystemTemp: temp.cpu?.temperature?temp.cpu.temperature:0,
                });
               
             }
@@ -69,6 +70,9 @@ export function StatsScreen() {
 
 		return (
 			<div className="screen">
+				<Helmet>
+					<title>Stats - Project Tiara</title>
+				</Helmet>
 				<TopBar float={true} leftToRight={true}>
 					<SimpleBackButton />
 					Stats

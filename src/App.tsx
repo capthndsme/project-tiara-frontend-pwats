@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Screens/Login";
 import { useEffect, useRef, useState } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { socket } from "./Components/socket";
 import { AppContext, AppStateType, DefaultAppState } from "./Components/AppContext";
 import { DisconnectedOverlay } from "./Components/DisconnectedOverlay";
@@ -27,6 +28,7 @@ function App(): JSX.Element {
 	const [appState, setAppState] = useState<AppStateType>(DefaultAppState);
 	// ConnectedOnce is used to determine if we should show the disconnected overlay.
 	const [connectedOnce, setConnectedOnce] = useState<boolean>(false);
+	const [showLoginFirst, setShowLoginFirst] = useState<boolean>(false);
 	// const [activeHwid, setActiveHwid] = useState("");
 	const [activeDeviceState, setActiveDeviceState] = useState<DeviceState>(DefaultDeviceState);
 	function authenticate() {
@@ -44,7 +46,13 @@ function App(): JSX.Element {
 				if (data.success) {
 					toast("Connected to the server.", { icon: "🌐" });
 					console.log(data);
-					setAppState((appState) => ({ ...appState, authenticated: true, accountId: data.accountId, accountDetails: data.accountDetails, connected: true }));
+					setAppState((appState) => ({
+						...appState,
+						authenticated: true,
+						accountId: data.accountId,
+						accountDetails: data.accountDetails,
+						connected: true,
+					}));
 					socket.timeout(6000).emit("requestDeviceList", { accountId: data.accountId }, (err: Boolean, requestData: ReqDevices) => {
 						if (err) {
 							toast.error("Failed to get device list.");
@@ -53,11 +61,17 @@ function App(): JSX.Element {
 						// Move ConnectedOnce here. ConnectedOnce significies that we have connected to the server at least once.
 						// and have received a list of devices.
 						setConnectedOnce(true);
+						const hasRedirect = localStorage.getItem("redirect");
+						if (hasRedirect) {
+							console.log("Redirector: We have a redirect: " + hasRedirect);
+							localStorage.removeItem("redirect");
+							navigate.current(hasRedirect);
+						}
 						if (requestData.devices) {
 							if (requestData.devices.length === 0) {
 								// Show a message saying that there are no devices
 								toast.error("No devices found.");
-								
+
 								setActiveDeviceState((localState) => {
 									localState.deviceDetails = undefined;
 									return localState;
@@ -184,7 +198,7 @@ function App(): JSX.Element {
 							const found = newDeviceToggles[i];
 							if (found) {
 								// Create a new copy of the found object with the updated property
-								console.log( found.lastChanged)
+								console.log(found.lastChanged);
 								const newFound = {
 									...found,
 									hasLock: false,
@@ -235,6 +249,14 @@ function App(): JSX.Element {
 		const user = localStorage.getItem("username");
 		const session = localStorage.getItem("session");
 		if (!user || !session) {
+			// Save current path to localstorage
+
+			console.log("[PreLoginRedirect] Current path: ", window.location.pathname);
+			if (window.location.pathname !== "/login" && window.location.pathname !== "/") {
+				setShowLoginFirst(true);
+				localStorage.setItem("redirect", window.location.pathname);
+			}
+			// Redirect to login page
 			navigate.current("/login");
 		}
 
@@ -257,6 +279,12 @@ function App(): JSX.Element {
 		socket.on("connect", () => {
 			setAppState((appState) => ({ ...appState, connected: true }));
 			authenticate();
+		});
+		socket.on("DeviceOn", () => {
+			toast("Device went online.");
+		});
+		socket.on("DeviceOff", () => {
+			toast("Device went offline.");
 		});
 		socket.on("toggleStateUpdate", (d: DeviceBaseToggle) => {
 			console.log("toggle state received", d);
@@ -296,26 +324,30 @@ function App(): JSX.Element {
 			socket.disconnect();
 			socket.off("connect");
 			socket.off("toggleStateUpdate");
+			socket.off("DeviceOn");
+			socket.off("DeviceOff");
 			socket.off("disconnect");
 		};
 		// The navigate function is a dependency of this effect, but we don't want to run this effect when it changes.
 	}, []);
 
 	return (
-		<AppContext.Provider value={appState}>
-			<FunctionContext.Provider value={appFunctions}>
-				<ActiveDeviceContext.Provider value={activeDeviceState}>
-					<DisconnectedOverlay disconnected={!appState.connected} />
+		<HelmetProvider>
+			<AppContext.Provider value={appState}>
+				<FunctionContext.Provider value={appFunctions}>
+					<ActiveDeviceContext.Provider value={activeDeviceState}>
+						<DisconnectedOverlay disconnected={!appState.connected} />
 
-					<Routes>
-					<Route path="/about" element={<About />} />
-					<Route path="/theme" element={<AppTheme />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/*" element={<MainScreen connectedOnce={connectedOnce} />} />
-					</Routes>
-				</ActiveDeviceContext.Provider>
-			</FunctionContext.Provider>
-		</AppContext.Provider>
+						<Routes>
+							<Route path="/about" element={<About />} />
+							<Route path="/theme" element={<AppTheme />} />
+							<Route path="/login" element={<Login showLoginFirst={showLoginFirst} />} />
+							<Route path="/*" element={<MainScreen connectedOnce={connectedOnce} />} />
+						</Routes>
+					</ActiveDeviceContext.Provider>
+				</FunctionContext.Provider>
+			</AppContext.Provider>
+		</HelmetProvider>
 	);
 }
 

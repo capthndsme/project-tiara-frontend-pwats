@@ -10,6 +10,7 @@ import { NotificationType } from "../Types/NotificationType";
 import Delayed from "../Components/Delayed";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { Helmet } from "react-helmet-async";
 const MySwal = withReactContent(Swal);
 export function Alerts() {
 	const [alerts, setAlerts] = useState<Array<NotificationEntity>>([]);
@@ -44,6 +45,9 @@ export function Alerts() {
 	}
 	return (
 		<div className="screen">
+			<Helmet>
+				<title> Alerts - Project Tiara </title>
+			</Helmet>
 			<TopBar> Alerts </TopBar>
 			<div className="maxWidth">
 				Notification Type
@@ -100,8 +104,8 @@ export function Alerts() {
 							background: "var(--darker-bg-colour)",
 
 							showCancelButton: true,
-							confirmButtonText: "Yes, logout!",
-							cancelButtonText: "No, cancel!",
+							confirmButtonText: "Clear",
+							cancelButtonText: "Cancel",
 							cancelButtonColor: "var(--bg-colour)",
 							confirmButtonColor: "var(--highlight-colour)",
 							reverseButtons: true,
@@ -134,7 +138,23 @@ export function Alerts() {
 								<div className="alertEntry" key={index}>
 									<div className="alertTitle"> {alert.title} </div>
 									<div className="alertTime"> {moment(alert.sentTimestamp).format("YYYY-MM-DD HH:mm")} </div>
-
+										<div className="rightSide alertTitle withPointer"
+										onClick={() => {
+											socket.volatile.timeout(5000).emit("DismissNotification", {id: alert.id}, (err: Boolean, data: never) => {
+												if (err) {
+												return toast.error("Failed to dismiss notification.");
+											} else {
+												setAlerts(alerts.filter((a) => {
+													return a.id !== alert.id;
+												}));
+											}
+										}
+										);
+									}
+									}
+									> 
+										Dismiss
+									</div>
 									<div className="alertBody"> {alert.message} </div>
 								</div>
 							</Delayed>
