@@ -37,7 +37,7 @@ export function DeviceToggle({ toggle }: { toggle: DeviceBaseToggle | null }) {
 		// if they wish to proceed.
 		const DISPENSE_MULTIPLIER = 12; // 6 hours
 		// 30 minutes for everything else, 6 hours for food dispense.
-		const minimumTime = 30 * 60 * 1000 * (toggle?.toggleName === "foodDispense"?1:DISPENSE_MULTIPLIER);
+		const minimumTime = 30 * 60 * 1000 * (toggle?.toggleName === "foodDispense"?DISPENSE_MULTIPLIER:1);
 		const lastChanged = toggle?.lastChanged ?? Date.now();
 		const timeSince = Date.now() - lastChanged;
 		console.log("Time since last toggle:", timeSince, "ms")
