@@ -6,11 +6,12 @@ import { toast } from "react-hot-toast";
 import moment from "moment";
 import { GenericCallbackResultWithData } from "../Types/GenericCallbackResultWithData";
 import { NotificationType } from "../Types/NotificationType";
- 
+
 import Delayed from "../Components/Delayed";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Helmet } from "react-helmet-async";
+import { HiXMark } from "react-icons/hi2";
 const MySwal = withReactContent(Swal);
 export function Alerts() {
 	const [alerts, setAlerts] = useState<Array<NotificationEntity>>([]);
@@ -21,6 +22,14 @@ export function Alerts() {
 		if (socket.disconnected) {
 			socket.connect();
 		}
+		function notificationListener(data: NotificationEntity) {
+			// listens for notifications
+
+			console.log("Notification", data);
+			setAlerts((alerts) => {
+				return [data, ...alerts];
+			});
+		}
 		socket.timeout(15000).emit("GetNotifications", {}, (err: Boolean, data: GenericCallbackResultWithData<Array<NotificationEntity>>) => {
 			if (err) {
 				return toast.error("Failed to get notifications.");
@@ -29,10 +38,12 @@ export function Alerts() {
 				setAlerts(data.data);
 			}
 		});
+		socket.on("GetNotifications", notificationListener);
 		return () => {
 			socket.off("GetNotifications");
+			socket.off("Notification", notificationListener);
 			MySwal.close();
-		}
+		};
 	}, []);
 	let localAlerts;
 	if (alertsFilter) {
@@ -93,9 +104,9 @@ export function Alerts() {
 				<button
 					className="refreshButton"
 					style={{
-						display: (localAlerts.length === 0) ? "none" : "block",
+						display: localAlerts.length === 0 ? "none" : "block",
 					}}
-					disabled={(localAlerts.length === 0 || pendingClear)}
+					disabled={localAlerts.length === 0 || pendingClear}
 					onClick={() => {
 						MySwal.fire({
 							title: "Clear alerts?",
@@ -109,19 +120,15 @@ export function Alerts() {
 							cancelButtonColor: "var(--bg-colour)",
 							confirmButtonColor: "var(--highlight-colour)",
 							reverseButtons: true,
-						})
-						.then(res=> {
+						}).then((res) => {
 							if (res.isConfirmed) {
-								setPendingClear(true)
-								socket
-								.volatile 
-								.timeout(5000)
-								.emit("ClearNotifications", {}, (err: Boolean, data: never) => {
+								setPendingClear(true);
+								socket.volatile.timeout(5000).emit("ClearNotifications", {}, (err: Boolean, data: never) => {
 									setPendingClear(false);
 									setAlerts([]);
 								});
 							}
-						})
+						});
 					}}
 				>
 					Clear notifications
@@ -138,22 +145,25 @@ export function Alerts() {
 								<div className="alertEntry" key={index}>
 									<div className="alertTitle"> {alert.title} </div>
 									<div className="alertTime"> {moment(alert.sentTimestamp).format("YYYY-MM-DD HH:mm")} </div>
-										<div className="rightSide alertTitle withPointer"
+									<div
+										className="rightSide alertTitle withPointer"
 										onClick={() => {
-											socket.volatile.timeout(5000).emit("DismissNotification", {id: alert.id}, (err: Boolean, data: never) => {
-												if (err) {
-												return toast.error("Failed to dismiss notification.");
-											} else {
-												setAlerts(alerts.filter((a) => {
-													return a.id !== alert.id;
-												}));
-											}
-										}
-										);
-									}
-									}
-									> 
-										Dismiss
+											socket.volatile
+												.timeout(5000)
+												.emit("DismissNotification", { id: alert.id }, (err: Boolean, data: never) => {
+													if (err) {
+														return toast.error("Failed to dismiss notification.");
+													} else {
+														setAlerts(
+															alerts.filter((a) => {
+																return a.id !== alert.id;
+															})
+														);
+													}
+												});
+										}}
+									>
+										<HiXMark />
 									</div>
 									<div className="alertBody"> {alert.message} </div>
 								</div>

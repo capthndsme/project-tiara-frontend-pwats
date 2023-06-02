@@ -587,6 +587,10 @@ body,
 	float: right;
  
 }
+.buttonMargin {
+	margin: 4px 8px;
+	width: calc(100% - 16px)
+}
 .rightSide {
 	float: right;
 }
@@ -594,7 +598,7 @@ body,
 .genericTitle {
 	font-size: 16px;
 	display: inline-block;
-	padding: 10px 12px 0px 12px;
+	padding: 10px 8px 0px 12px;
 	color: var(--light-colour);
 }
 .alertTime,

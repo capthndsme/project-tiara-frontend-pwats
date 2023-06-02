@@ -22,19 +22,29 @@ import { DeviceBaseToggle, ToggleType } from "./Types/DeviceBaseToggle";
 import { ToggleWithStatus } from "./Types/WS/ToggleWithStatus";
 import { About } from "./Screens/About";
 import { AppTheme } from "./Screens/Subscreens/AppTheme";
+import { NotificationEntity } from "./Types/NotificationEntity";
 
 function App(): JSX.Element {
 	const navigate = useRef(useNavigate());
 	const [appState, setAppState] = useState<AppStateType>(DefaultAppState);
 	// ConnectedOnce is used to determine if we should show the disconnected overlay.
 	const [connectedOnce, setConnectedOnce] = useState<boolean>(false);
+
 	const [showLoginFirst, setShowLoginFirst] = useState<boolean>(false);
 	// const [activeHwid, setActiveHwid] = useState("");
 	const [activeDeviceState, setActiveDeviceState] = useState<DeviceState>(DefaultDeviceState);
+	function notificationListener(data: NotificationEntity) {
+		// listens for notifications
+		console.log("Notification", data);
+		toast(data.message, {
+			icon: "📢",
+		});
+	}
 	function authenticate() {
 		const user = localStorage.getItem("username");
 		const session = localStorage.getItem("session");
 		let emitStart = Date.now();
+
 		socket.emit(
 			"authenticate",
 			{
@@ -62,6 +72,7 @@ function App(): JSX.Element {
 						// and have received a list of devices.
 						setConnectedOnce(true);
 						const hasRedirect = localStorage.getItem("redirect");
+						socket.on("Notification", notificationListener);
 						if (hasRedirect) {
 							console.log("Redirector: We have a redirect: " + hasRedirect);
 							localStorage.removeItem("redirect");
@@ -325,6 +336,7 @@ function App(): JSX.Element {
 			socket.off("connect");
 			socket.off("toggleStateUpdate");
 			socket.off("DeviceOn");
+			socket.off("Notification", notificationListener);
 			socket.off("DeviceOff");
 			socket.off("disconnect");
 		};

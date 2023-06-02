@@ -39,7 +39,7 @@ export function More() {
 					<Link to="/more/share" className="appLink">
 						Share this device
 					</Link>
-					<Link to="/more/share" className="appLink">
+					<Link to="/more/device" className="appLink">
 						Edit device details
 					</Link>
 					<button className="appLink"
@@ -109,9 +109,7 @@ export function More() {
 						<div><h2 className="noMargin" style={{marginBottom:4}}>{appContext.accountDetails?.DisplayName}</h2>@{appContext.accountDetails?.Username}</div>
 					</div>
 
-					<Link to="/more/account" className="appLink">
-						Edit account details
-					</Link>
+					 
 					<Link to="/more/sessions" className="appLink">
 						Authorised sessions
 					</Link>

@@ -56,10 +56,10 @@ export function StatsScreen() {
             if (!(saneInsideTemp === 0 || saneOutsideTemp === 0 || saneInsideHumidity === 0 || saneOutsideHumidity === 0)) {
                chartData.push({
                   label:  moment(data[i].Timestamp).format("DD/MM HH:mm"),
-                  InsideTemp: saneInsideTemp,
-                  InsideHumidity: saneInsideHumidity,
-                  OutsideTemp: saneOutsideTemp,
-                  OutsideHumidity: saneOutsideHumidity,
+                  InsideTemp: saneInsideTemp.toFixed(2),
+                  InsideHumidity: saneInsideHumidity.toFixed(2),
+                  OutsideTemp: saneOutsideTemp.toFixed(2),
+                  OutsideHumidity: saneOutsideHumidity.toFixed(2),
                   SystemTemp: temp.cpu?.temperature?temp.cpu.temperature:0,
                });
               

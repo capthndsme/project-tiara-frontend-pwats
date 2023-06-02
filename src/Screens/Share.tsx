@@ -59,7 +59,8 @@ export function Share() {
 							cancelButtonText: "Cancel",
 						}).then((result) => {
 							if (result.isConfirmed) {
-								socket.timeout(15000).emit("RevokeInviteHash", {}, (err: Boolean, data: GenericCallbackResultWithData<string>) => {
+								toast("Revoking invite link...");
+								socket.timeout(3000).emit("RevokeInviteHash", {}, (err: Boolean, data: GenericCallbackResultWithData<string>) => {
 									if (err || !data.success) {
 										toast("Failed to revoke invite.");
 										console.log("Failed to revoke invite");
